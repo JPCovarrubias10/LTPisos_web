@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proyectos - LTPisos Consultoría y Diseño</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --orange: #D4792C;
+            --orange-light: #E8943F;
+            --orange-dark: #B5631E;
+            --gray-dark: #4A4A4A;
+            --gray-mid: #6B6B6B;
+            --gray-light: #9B9B9B;
+            --bg-light: #F7F7F5;
+            --bg-white: #FFFFFF;
+            --text-dark: #2C2C2C;
+            --text-body: #4A4A4A;
+            --border: #E0E0E0;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; font-size: 16px; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--text-body);
+            background: var(--bg-white);
+            line-height: 1.6;
+        }
+
+        /* ===== NAVBAR (2-row) ===== */
+        .navbar {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+            background: rgba(255,255,255,0.97); backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border); transition: box-shadow 0.3s;
+        }
+        .navbar.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.08); }
+        .navbar-top {
+            max-width: 1200px; margin: 0 auto; padding: 0.5rem 2rem;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .navbar-logo img { height: 52px; }
+        .lang-switcher { display:flex; align-items:center; gap:0.25rem; font-size:0.82rem; }
+        .lang-switcher a { font-weight:700; text-decoration:none; letter-spacing:0.05em; }
+        .lang-switcher span { color:var(--border); }
+        .navbar-bottom {
+            border-top: 1px solid var(--border);
+            background: rgba(255,255,255,0.97);
+        }
+        .navbar-inner {
+            max-width: 1200px; margin: 0 auto; padding: 0 2rem;
+            display: flex; align-items: center; justify-content: center; height: 44px;
+        }
+        .navbar-links { display: flex; gap: 1.75rem; list-style: none; }
+        .navbar-links a {
+            text-decoration: none; color: var(--gray-dark); font-size: 0.875rem;
+            font-weight: 500; letter-spacing: 0.02em; transition: color 0.2s; position: relative;
+        }
+        .navbar-links a:hover, .navbar-links a.active { color: var(--orange); }
+        .navbar-links a::after {
+            content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px;
+            background: var(--orange); transition: width 0.3s;
+        }
+        .navbar-links a:hover::after, .navbar-links a.active::after { width: 100%; }
+        .menu-toggle { display: none; background: none; border: none; cursor: pointer; padding: 8px; }
+        .menu-toggle span { display: block; width: 24px; height: 2px; background: var(--gray-dark); margin: 5px 0; transition: 0.3s; }
+
+        /* ===== PAGE HEADER ===== */
+        .page-header {
+            padding-top: 108px;
+            background: linear-gradient(135deg, #1a1a2e 0%, #2d2d44 50%, #3d2e1e 100%);
+            color: white;
+            padding-bottom: 3rem;
+            text-align: center;
+        }
+        .page-header-inner { max-width: 1200px; margin: 0 auto; padding: 4rem 2rem 2rem; }
+        .page-header h1 { font-size: 2.5rem; font-weight: 700; margin-bottom: 0.75rem; }
+        .page-header p { font-size: 1.05rem; opacity: 0.85; max-width: 600px; margin: 0 auto; }
+        .breadcrumb { margin-top: 1.5rem; font-size: 0.85rem; opacity: 0.7; }
+        .breadcrumb a { color: white; text-decoration: none; }
+        .breadcrumb a:hover { text-decoration: underline; }
+
+        /* ===== FILTERS ===== */
+        .filters {
+            max-width: 1200px; margin: 0 auto; padding: 2rem;
+            display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center;
+        }
+        .filter-btn {
+            padding: 8px 20px; border: 1px solid var(--border); border-radius: 25px;
+            background: white; color: var(--gray-dark); font-size: 0.85rem; font-weight: 500;
+            cursor: pointer; transition: all 0.2s; font-family: inherit;
+        }
+        .filter-btn:hover { border-color: var(--orange); color: var(--orange); }
+        .filter-btn.active {
+            background: var(--orange); color: white; border-color: var(--orange);
+        }
+        .project-count {
+            text-align: center; padding: 0 2rem 1rem;
+            font-size: 0.85rem; color: var(--gray-light);
+        }
+
+        /* ===== PROJECTS GRID ===== */
+        .projects-section { max-width: 1200px; margin: 0 auto; padding: 1rem 2rem 4rem; }
+        .projects-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem;
+        }
+
+        /* ===== PROJECT CARD ===== */
+        .project-card {
+            border-radius: 12px; overflow: hidden; background: white;
+            border: 1px solid var(--border); transition: all 0.3s; cursor: pointer;
+        }
+        .project-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.1); }
+        .project-card.hidden { display: none; }
+        .project-thumb { position: relative; height: 240px; overflow: hidden; }
+        .project-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+        .project-card:hover .project-thumb img { transform: scale(1.05); }
+        .photo-count {
+            position: absolute; bottom: 12px; right: 12px;
+            background: rgba(0,0,0,0.7); color: white; padding: 4px 12px;
+            border-radius: 20px; font-size: 0.75rem; font-weight: 500;
+            display: flex; align-items: center; gap: 5px;
+        }
+        .photo-count svg { width: 14px; height: 14px; fill: none; stroke: white; stroke-width: 2; }
+        .project-card-info { padding: 1.25rem; }
+        .project-card-info h3 { font-size: 1.05rem; color: var(--text-dark); margin-bottom: 0.4rem; }
+        .project-card-info p { font-size: 0.85rem; color: var(--gray-mid); line-height: 1.6; }
+        .project-card-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.75rem; }
+        .project-tag {
+            padding: 3px 10px; background: #FFF3E6; color: var(--orange-dark);
+            border-radius: 4px; font-size: 0.72rem; font-weight: 500;
+        }
+
+        /* ===== LIGHTBOX ===== */
+        .lightbox {
+            display: none; position: fixed; inset: 0; z-index: 2000;
+            background: rgba(0,0,0,0.92); align-items: center; justify-content: center;
+        }
+        .lightbox.open { display: flex; }
+        .lightbox-close {
+            position: absolute; top: 20px; right: 24px;
+            background: none; border: none; color: white; font-size: 2rem;
+            cursor: pointer; z-index: 2001; width: 48px; height: 48px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 50%; transition: background 0.2s;
+        }
+        .lightbox-close:hover { background: rgba(255,255,255,0.1); }
+        .lightbox-content {
+            max-width: 90vw; max-height: 80vh; position: relative; text-align: center;
+        }
+        .lightbox-content img {
+            max-width: 100%; max-height: 75vh; object-fit: contain; border-radius: 8px;
+        }
+        .lightbox-caption {
+            color: white; font-size: 0.9rem; margin-top: 1rem; opacity: 0.8;
+        }
+        .lightbox-nav {
+            position: absolute; top: 50%; transform: translateY(-50%);
+            background: rgba(255,255,255,0.15); border: none; color: white;
+            width: 50px; height: 50px; border-radius: 50%; cursor: pointer;
+            font-size: 1.5rem; display: flex; align-items: center; justify-content: center;
+            transition: background 0.2s;
+        }
+        .lightbox-nav:hover { background: rgba(255,255,255,0.3); }
+        .lightbox-prev { left: 20px; }
+        .lightbox-next { right: 20px; }
+        .lightbox-thumbnails {
+            display: flex; gap: 8px; justify-content: center; margin-top: 1rem;
+            overflow-x: auto; max-width: 90vw; padding: 8px 0;
+        }
+        .lightbox-thumb {
+            width: 60px; height: 45px; border-radius: 4px; overflow: hidden;
+            cursor: pointer; border: 2px solid transparent; transition: border-color 0.2s;
+            flex-shrink: 0; opacity: 0.5; transition: opacity 0.2s, border-color 0.2s;
+        }
+        .lightbox-thumb.active { border-color: var(--orange); opacity: 1; }
+        .lightbox-thumb:hover { opacity: 0.8; }
+        .lightbox-thumb img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* ===== FOOTER ===== */
+        footer {
+            background: #1a1a2e; color: rgba(255,255,255,0.7); padding: 3rem 2rem;
+        }
+        .footer-inner {
+            max-width: 1200px; margin: 0 auto; display: flex;
+            justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;
+        }
+        .footer-inner p { font-size: 0.85rem; }
+        .footer-links { display: flex; gap: 1.5rem; list-style: none; }
+        .footer-links a { color: rgba(255,255,255,0.7); text-decoration: none; font-size: 0.85rem; transition: color 0.2s; }
+        .footer-links a:hover { color: var(--orange-light); }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 992px) { .projects-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 768px) {
+            .navbar-links {
+                display: none; position: absolute; top: 108px; left: 0; right: 0;
+                background: white; flex-direction: column; padding: 1rem 2rem;
+                border-bottom: 1px solid var(--border); gap: 1rem;
+            }
+            .navbar-links.open { display: flex; }
+            .menu-toggle { display: block; }
+            .projects-grid { grid-template-columns: 1fr; }
+            .page-header h1 { font-size: 1.8rem; }
+        }
+
+        /* ===== ANIMATIONS ===== */
+        .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.5s, transform 0.5s; }
+        .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+        /* ===== LISTA COMPLETA ===== */
+        .full-list-section { padding: 5rem 2rem; background: var(--bg-light); }
+        .full-list-section .section-inner { max-width: 1100px; margin: 0 auto; }
+        .full-list-section .section-header { text-align: center; margin-bottom: 2.5rem; }
+        .full-list-section .section-header h2 { font-size: 1.9rem; font-weight: 700; color: var(--text-dark); margin-bottom: 0.75rem; }
+        .full-list-section .section-header p { font-size: 0.95rem; color: var(--gray-mid); }
+        .accent-line { width: 50px; height: 3px; background: var(--orange); border-radius: 2px; }
+        .list-legend {
+            display: flex; flex-wrap: wrap; gap: 1.5rem; justify-content: center;
+            margin-bottom: 2.5rem; padding: 1rem 1.5rem; background: white;
+            border-radius: 10px; border: 1px solid var(--border);
+        }
+        .legend-item { font-size: 0.82rem; color: var(--gray-mid); display: flex; align-items: center; gap: 0.5rem; }
+        .legend-badge { padding: 2px 8px; border-radius: 4px; font-size: 0.72rem; font-weight: 700; }
+        .legend-badge.rc { background: #E8F4FD; color: #1565C0; }
+        .legend-badge.pt { background: #E8F5E9; color: #2E7D32; }
+        .legend-badge.er { background: #FFF3E0; color: #E65100; }
+        .legend-badge.lc { background: #F3E5F5; color: #6A1B9A; }
+        .project-list-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+        .list-column { background: white; border-radius: 12px; padding: 2rem; border: 1px solid var(--border); }
+        .list-category {
+            font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;
+            color: var(--orange); border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; margin-bottom: 0.75rem;
+        }
+        .project-list { list-style: none; padding: 0; }
+        .project-list li {
+            display: flex; align-items: center; gap: 0.5rem; padding: 0.45rem 0;
+            border-bottom: 1px solid #f0f0f0; font-size: 0.875rem; color: var(--text-body);
+        }
+        .project-list li:last-child { border-bottom: none; }
+        .proj-name { flex: 1; }
+        .proj-type { padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 600; white-space: nowrap; }
+        .rc-tag { background: #E8F4FD; color: #1565C0; }
+        .pt-tag { background: #E8F5E9; color: #2E7D32; }
+        .er-tag { background: #FFF3E0; color: #E65100; }
+        .lc-tag { background: #F3E5F5; color: #6A1B9A; }
+        @media (max-width: 768px) { .project-list-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+    <div class="navbar-top">
+        <a href="index.html" class="navbar-logo">
+            <img src="img/logo.jpg" alt="LTPisos">
+        </a>
+        <div class="lang-switcher"><a href="proyectos.html" style="color:var(--orange);">ES</a><span>|</span><a href="proyectos-en.html" style="color:var(--gray-mid);">EN</a></div>
+        <button class="menu-toggle" onclick="document.querySelector('.navbar-links').classList.toggle('open')">
+            <span></span><span></span><span></span>
+        </button>
+    </div>
+    <div class="navbar-bottom">
+        <div class="navbar-inner">
+            <ul class="navbar-links">
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="index.html#enfoque">Quiénes Somos</a></li>
+            <li><a href="index.html#servicios">Servicios</a></li>
+            <li><a href="optislab.html">OptiSlab</a></li>
+            <li><a href="proyectos.html" class="active">Proyectos</a></li>
+            <li><a href="equipo.html">Equipo</a></li>
+            <li><a href="socios.html">Socios Estratégicos</a></li>
+            <li><a href="publicaciones.html">Publicaciones</a></li>
+            <li><a href="index.html#contacto">Contacto</a></li>
+            <li><a href="https://www.linkedin.com/company/15079852/" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:0.35rem;"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg> LinkedIn</a></li>
+        </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+    <div class="page-header-inner">
+        <h1>Proyectos</h1>
+        <p>Más de 500 proyectos ejecutados en Chile, Perú, Colombia, México y Estados Unidos. La selección muestra experiencia, diversidad de clientes y profundidad técnica</p>
+        <div class="breadcrumb"><a href="index.html">Inicio</a> / Proyectos</div>
+    </div>
+</div>
+
+<!-- FILTERS -->
+<div class="filters" id="filters">
+    <button class="filter-btn active" data-filter="all">Todos</button>
+    <button class="filter-btn" data-filter="bodega">Bodegas</button>
+    <button class="filter-btn" data-filter="retail">Retail</button>
+    <button class="filter-btn" data-filter="industrial">Industrial</button>
+    <button class="filter-btn" data-filter="internacional">Internacional</button>
+</div>
+<div class="project-count" id="projectCount">Mostrando 8 proyectos</div>
+
+<!-- PROJECTS GRID -->
+<div class="projects-section">
+    <div class="projects-grid" id="projectsGrid">
+
+        <!-- Walmart -->
+        <div class="project-card fade-in" data-category="bodega retail" data-images="img/proyectos/Walmart_1.jpg,img/proyectos/Walmart_2.jpg,img/proyectos/Walmart_3.jpg,img/proyectos/walmart_proj_2.jpg,img/proyectos/walmart_proj_5.jpg,img/proyectos/walmart_proj_8.jpg" data-name="CD Walmart El Peñón">
+            <div class="project-thumb">
+                <img src="img/proyectos/Walmart_1.jpg" alt="CD Walmart El Peñón">
+                <span class="photo-count">
+                    <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+                    6 fotos
+                </span>
+            </div>
+            <div class="project-card-info">
+                <h3>CD Walmart — Lo Aguirre / El Peñón</h3>
+                <p>Piso de retracción compensada de 18 cm de espesor. 150.000 m² de piso interior. Construido por Katemu con Hormigón Continua Melón. Bodega de alto tránsito, 6 posiciones de altura.</p>
+                <div class="project-card-tags">
+                    <span class="project-tag">150.000 m²</span>
+                    <span class="project-tag">Retracción Compensada</span>
+                    <span class="project-tag">Chile</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bluexpress -->
+        <div class="project-card fade-in" data-category="bodega" data-images="img/proyectos/bluexpress_1.jpg,img/proyectos/bluexpress_2.jpg,img/proyectos/bluexpress_4.jpg,img/proyectos/bluexpress_new_1.jpg" data-name="Blue Express">
+            <div class="project-thumb">
+                <img src="img/proyectos/bluexpress_1.jpg" alt="Blue Express">
+                <span class="photo-count">
+                    <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+                    4 fotos
+                </span>
+            </div>
+            <div class="project-card-info">
+                <h3>Blue Express — CD Logístico (2013)</h3>
+                <p>2 zonas: retracción compensada en racks con trilaterales (20 cm espesor) y losas de 2,5 m en sorter y mezzanina (15–20 cm). 9 racks de altura, HF 4,2 (80) 40-10. Diamond Dowels, Armored Edge y PD3.</p>
+                <div class="project-card-tags">
+                    <span class="project-tag">Retracción Compensada</span>
+                    <span class="project-tag">Losas 2,5 m</span>
+                    <span class="project-tag">Chile</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bodenor Flexcenter -->
+        <div class="project-card fade-in" data-category="bodega" data-images="img/proyectos/bodenor4_1.jpg,img/proyectos/bodenor4_2.jpg" data-name="Bodenor Flexcenter 4">
+            <div class="project-thumb">
+                <img src="img/proyectos/bodenor4_1.jpg" alt="Bodenor Flexcenter 4">
+                <span class="photo-count">
+                    <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+                    2 fotos
+                </span>
+            </div>
+            <div class="project-card-info">
+                <h3>Bodenor Flexcenter 4 — Lo Boza (2010)</h3>
+                <p>Losas pequeñas de 2,3 m en zona de racks. 6 racks de altura, 22 grúas. Hormigón HF 4,2 (80) 40-10, espesor 15 cm, base granular 15 cm, 3,5 kg/m² endurecedor de cuarzo, Kc 10 MPa/m.</p>
+                <div class="project-card-tags">
+                    <span class="project-tag">Losas 2,5 m</span>
+                    <span class="project-tag">Centro de Distribución</span>
+                    <span class="project-tag">Chile</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bodenor Enea -->
+        <div class="project-card fade-in" data-category="bodega" data-images="img/proyectos/Bodenor enea.JPG,img/proyectos/Bodenor enea 2.JPG,img/proyectos/bodenor_enea_7.jpg" data-name="Bodenor Enea">
+            <div class="project-thumb">
+                <img src="img/proyectos/Bodenor enea.JPG" alt="Bodenor Enea">
+                <span class="photo-count">
+                    <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+                    3 fotos
+                </span>
+            </div>
+            <div class="project-card-info">
+                <h3>Bodenor ENEA</h3>
+                <p>Parque logístico multi-tenant (Bodenor, Ditec, Finning, SPL). Losas de 2,5 m, 6 posiciones de altura, mejoramiento de pumacita, diamond dowels y armored edge.</p>
+                <div class="project-card-tags">
+                    <span class="project-tag">Losas 2,5 m</span>
+                    <span class="project-tag">Multi-tenant</span>
+                    <span class="project-tag">Chile</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Falabella -->
+        <div class="project-card fade-in" data-category="retail" data-images="img/proyectos/falabella.jpg" data-name="Falabella">
+            <div class="project-thumb">
+                <img src="img/proyectos/falabella.jpg" alt="Falabella">
+                <span class="photo-count">
+                    <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+                    1 foto
+                </span>
+            </div>
+            <div class="project-card-info">
+                <h3>Falabella</h3>
+                <p>Piso de retracción compensada de 18 cm de espesor. Centro de distribución y retail de alto tráfico.</p>
+                <div class="project-card-tags">
+                    <span class="project-tag">Retracción Compensada</span>
+                    <span class="project-tag">18 cm</span>
+                    <span class="project-tag">Retail</span>
+                    <span class="project-tag">Chile</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cial Interior -->
+        <div class="project-card fade-in" data-category="retail" data-images="img/proyectos/cial_1.jpg,img/proyectos/cial_2.jpg,img/proyectos/cial_3.jpg,img/proyectos/cial_4.jpg,img/proyectos/cial_5.jpg,img/proyectos/cial_8.jpg" data-name="CIAL San Jorge">
+            <div class="project-thumb">
+                <img src="img/proyectos/cial_1.jpg" alt="CIAL San Jorge">
+                <span class="photo-count">
+                    <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+                    6 fotos
+                </span>
+            </div>
+            <div class="project-card-info">
+                <h3>CIAL — San Jorge (2013)</h3>
+                <p>Zona racks con losas estratégicamente reforzadas y zona freezer con retracción compensada. Temperatura controlada a 4°C, 6 racks de altura. HF 4,2 (80) 40-10, espesor 15 cm, losas de 3,75 m y 40 m (RC). Diamond Dowels, Armored Edge y PD3.</p>
+                <div class="project-card-tags">
+                    <span class="project-tag">Retracción Compensada</span>
+                    <span class="project-tag">Freezer</span>
+                    <span class="project-tag">Chile</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Volvo -->
+        <div class="project-card fade-in" data-category="industrial" data-images="img/proyectos/volvo_3.jpg,img/proyectos/volvo_6.jpg" data-name="Volvo Quilicura">
+            <div class="project-thumb">
+                <img src="img/proyectos/volvo_3.jpg" alt="Volvo Quilicura">
+                <span class="photo-count">
+                    <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+                    2 fotos
+                </span>
+            </div>
+            <div class="project-card-info">
+                <h3>Volvo — Quilicura</h3>
+                <p>Taller de camiones y zona de racks con losas de 2,3 m. Hormigón HF 4,2 (80) 40-10, espesor 15 cm, base granular 15 cm, mejoramiento granular, Kc 10 MPa/m, 2,5 kg/m² endurecedor de cuarzo.</p>
+                <div class="project-card-tags">
+                    <span class="project-tag">Losas 2,3 m</span>
+                    <span class="project-tag">Industrial</span>
+                    <span class="project-tag">Chile</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Aguas Andinas Piscinas -->
+        <div class="project-card fade-in" data-category="industrial" data-images="img/proyectos/Piscina_aguas_andinas_1.png,img/proyectos/Estanque%20Aguas%20Andina_2.jpg" data-name="Aguas Andinas">
+            <div class="project-thumb">
+                <img src="img/proyectos/Piscina_aguas_andinas_1.png" alt="Piscinas Aguas Andinas">
+                <span class="photo-count">
+                    <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+                    2 fotos
+                </span>
+            </div>
+            <div class="project-card-info">
+                <h3>Estanques Puente Alto — Aguas Andinas</h3>
+                <p>Asesoría en diseño y construcción de pavimentos para estanques de recolección de agua potable de Aguas Andinas. Recubrimiento con losas de dimensiones menores. Estanque de sedimentos con hormigón continuamente reforzado.</p>
+                <div class="project-card-tags">
+                    <span class="project-tag">Infraestructura</span>
+                    <span class="project-tag">HCR</span>
+                    <span class="project-tag">Chile</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- WLP -->
+        <div class="project-card fade-in" data-category="bodega" data-images="img/proyectos/wlp_2.jpg,img/proyectos/wlp_4.jpg,img/proyectos/wlp_5.jpg" data-name="WLP Parque Logístico">
+            <div class="project-thumb">
+                <img src="img/proyectos/wlp_2.jpg" alt="WLP Parque Logístico">
+                <span class="photo-count">
+                    <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+                    3 fotos
+                </span>
+            </div>
+            <div class="project-card-info">
+                <h3>WLP — Parque Logístico Imagina</h3>
+                <p>WLP I y II, parques logísticos multitenant. Losas de 2,5 m con diseño modular para distintos usos de bodega.</p>
+                <div class="project-card-tags">
+                    <span class="project-tag">Losas 2,5 m</span>
+                    <span class="project-tag">Multi-tenant</span>
+                    <span class="project-tag">Chile</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- LISTA COMPLETA DE PROYECTOS 2005-2025 -->
+<!-- ============================================================ -->
+<section class="full-list-section">
+    <div class="section-inner">
+        <div class="section-header fade-in">
+            <div class="accent-line" style="margin: 0 auto 1.5rem;"></div>
+            <h2>Principales Proyectos 2005 – 2025</h2>
+            <p>Selección de proyectos ejecutados en Chile y Latinoamérica a lo largo de más de 20 años de trayectoria</p>
+        </div>
+        <div class="list-legend fade-in">
+            <span class="legend-item"><span class="legend-badge rc">RC</span> Retracción Compensada</span>
+            <span class="legend-item"><span class="legend-badge pt">PT</span> Postensado</span>
+            <span class="legend-item"><span class="legend-badge er">ER</span> Estratégicamente Reforzado</span>
+            <span class="legend-item"><span class="legend-badge lc">LC</span> Losa de 2,5 m</span>
+        </div>
+        <div class="project-list-grid fade-in">
+            <div class="list-column">
+                <div class="list-category">Centros de Distribución — Retail</div>
+                <ul class="project-list">
+                    <li><span class="proj-name">CD Walmart El Peñón</span><span class="proj-type rc-tag">RC</span></li>
+                    <li><span class="proj-name">CD Walmart Puerto Seco</span><span class="proj-type rc-tag">RC</span></li>
+                    <li><span class="proj-name">CD Walmart Lo Aguirre</span><span class="proj-type rc-tag">RC</span></li>
+                    <li><span class="proj-name">CD Sodimac Lo Espejo</span><span class="proj-type pt-tag">PT</span></li>
+                    <li><span class="proj-name">CD Falabella</span><span class="proj-type rc-tag">RC</span></li>
+                    <li><span class="proj-name">CD Paris</span><span class="proj-type lc-tag">LC</span></li>
+                    <li><span class="proj-name">CD Cencosud</span></li>
+                    <li><span class="proj-name">CD Unimarc Lo Aguirre</span><span class="proj-type pt-tag">PT</span></li>
+                    <li><span class="proj-name">CD CIAL Lo Boza</span><span class="proj-type er-tag">ER</span></li>
+                    <li><span class="proj-name">CD Kaufmann Lampa</span><span class="proj-type rc-tag">RC</span><span class="proj-type lc-tag">LC</span></li>
+                    <li><span class="proj-name">CD Colún La Unión</span><span class="proj-type rc-tag">RC</span><span class="proj-type lc-tag">LC</span></li>
+                    <li><span class="proj-name">CD MK</span><span class="proj-type er-tag">ER fibra</span></li>
+                    <li><span class="proj-name">CD CCU Miraflores</span><span class="proj-type er-tag">ER</span></li>
+                    <li><span class="proj-name">CD Watts Lo Espejo / San Bernardo</span><span class="proj-type lc-tag">LC</span></li>
+                    <li><span class="proj-name">CD Bimbo</span></li>
+                    <li><span class="proj-name">CD Iansa</span></li>
+                    <li><span class="proj-name">CD Pharma Lima, Perú</span><span class="proj-type rc-tag">RC</span></li>
+                    <li><span class="proj-name">Pisos Salas Lider</span><span class="proj-type lc-tag">LC</span></li>
+                    <li><span class="proj-name">Del Curto Curicó / Rancagua</span><span class="proj-type lc-tag">LC</span></li>
+                </ul>
+
+                <div class="list-category" style="margin-top:1.5rem;">Parques Logísticos y Bodegas</div>
+                <ul class="project-list">
+                    <li><span class="proj-name">Bodenor Flexcenter Enea</span></li>
+                    <li><span class="proj-name">Bodenor Flexcenter Lo Boza</span></li>
+                    <li><span class="proj-name">EBCO Mega Centro de Bodegas</span><span class="proj-type lc-tag">LC</span></li>
+                    <li><span class="proj-name">Bodegas Mersan Lo Espejo</span><span class="proj-type lc-tag">LC</span></li>
+                    <li><span class="proj-name">WLP I y II — Imagina</span><span class="proj-type lc-tag">LC</span></li>
+                    <li><span class="proj-name">Bodegas Pudahuel Inarco</span><span class="proj-type er-tag">ER</span></li>
+                    <li><span class="proj-name">Bodegas Fortaleza</span><span class="proj-type lc-tag">LC</span></li>
+                    <li><span class="proj-name">Biodegas Montijo Enea Fondesa</span></li>
+                    <li><span class="proj-name">Bodegas Lo Boza II</span></li>
+                    <li><span class="proj-name">Blue Express CD Logístico</span><span class="proj-type rc-tag">RC</span><span class="proj-type lc-tag">LC</span></li>
+                    <li><span class="proj-name">Nestle Purina</span><span class="proj-type rc-tag">RC</span></li>
+                </ul>
+            </div>
+            <div class="list-column">
+                <div class="list-category">Industrial y Plantas</div>
+                <ul class="project-list">
+                    <li><span class="proj-name">Planta Celulosa Arauco</span></li>
+                    <li><span class="proj-name">Planta American Screw</span><span class="proj-type lc-tag">LC</span></li>
+                    <li><span class="proj-name">Metalurgia Arrigoni</span><span class="proj-type lc-tag">LC</span></li>
+                    <li><span class="proj-name">Dapsa</span><span class="proj-type pt-tag">PT</span></li>
+                    <li><span class="proj-name">Komatsu (La Negra, Iquique, Calama)</span><span class="proj-type lc-tag">LC fibra</span></li>
+                    <li><span class="proj-name">Volvo Quilicura</span><span class="proj-type lc-tag">LC</span></li>
+                    <li><span class="proj-name">Embotelladora Andina Miraflores / Peñalolén</span><span class="proj-type er-tag">ER</span></li>
+                    <li><span class="proj-name">Planta Puente Alto — Aguas Andinas</span></li>
+                </ul>
+
+                <div class="list-category" style="margin-top:1.5rem;">Infraestructura y Proyectos Especiales</div>
+                <ul class="project-list">
+                    <li><span class="proj-name">Estanques Puente Alto — Aguas Andinas</span></li>
+                    <li><span class="proj-name">Estacionamiento Aviones Aerocardal Pudahuel</span><span class="proj-type er-tag">ER</span></li>
+                    <li><span class="proj-name">Refinería Talara, Perú</span></li>
+                </ul>
+
+                <div class="list-category" style="margin-top:1.5rem;">Internacional</div>
+                <ul class="project-list">
+                    <li><span class="proj-name">Lindley Coca-Cola Perú (Trujillo, Lima, Arequipa)</span><span class="proj-type lc-tag">LC</span></li>
+                    <li><span class="proj-name">Lindley Trujillo, Perú</span><span class="proj-type er-tag">ER</span></li>
+                    <li><span class="proj-name">CD Pharma Lima, Perú</span><span class="proj-type rc-tag">RC</span></li>
+                    <li><span class="proj-name">Promarts, Perú</span></li>
+                    <li><span class="proj-name">Promarts, Ecuador</span></li>
+                    <li><span class="proj-name">Edificio Principal InRetail, Perú</span></li>
+                    <li><span class="proj-name">Bodega Sohen, Tijuana México</span></li>
+                    <li><span class="proj-name">Home Depot Conroe, EE.UU.</span></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox">
+    <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
+    <button class="lightbox-nav lightbox-prev" onclick="navLightbox(-1)">&#8249;</button>
+    <div class="lightbox-content">
+        <img id="lightboxImg" src="" alt="">
+        <div class="lightbox-caption" id="lightboxCaption"></div>
+        <div class="lightbox-thumbnails" id="lightboxThumbs"></div>
+    </div>
+    <button class="lightbox-nav lightbox-next" onclick="navLightbox(1)">&#8250;</button>
+</div>
+
+<!-- FOOTER -->
+<footer>
+    <div class="footer-inner">
+        <div>
+            <p style="font-weight:600; color:rgba(255,255,255,0.9); margin-bottom:0.25rem;">LTPisos Diseño e Ingeniería S.p.A.</p>
+            <p style="font-size:0.8rem;">© 2026 · Chile · Perú · Colombia · México · Costa Rica · EEUU · pablo@ltpisos.com</p>
+        </div>
+        <ul class="footer-links">
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="index.html#servicios">Servicios</a></li>
+            <li><a href="optislab.html">OptiSlab</a></li>
+            <li><a href="proyectos.html">Proyectos</a></li>
+            <li><a href="equipo.html">Equipo</a></li>
+            <li><a href="socios.html">Socios Estratégicos</a></li>
+            <li><a href="publicaciones.html">Publicaciones</a></li>
+            <li><a href="index.html#contacto">Contacto</a></li>
+            <li><a href="https://www.linkedin.com/company/15079852/" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:0.35rem;"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg> LinkedIn</a></li>
+        </ul>
+    </div>
+</footer>
+
+<script>
+// Navbar scroll
+window.addEventListener('scroll', () => {
+    document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+});
+
+// Scroll animations
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+            setTimeout(() => entry.target.classList.add('visible'), i * 80);
+        }
+    });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+// Filters
+const filterBtns = document.querySelectorAll('.filter-btn');
+const cards = document.querySelectorAll('.project-card');
+
+filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const filter = btn.dataset.filter;
+        let visible = 0;
+        cards.forEach(card => {
+            if (filter === 'all' || card.dataset.category.includes(filter)) {
+                card.classList.remove('hidden');
+                visible++;
+            } else {
+                card.classList.add('hidden');
+            }
+        });
+        document.getElementById('projectCount').textContent = `Mostrando ${visible} proyecto${visible !== 1 ? 's' : ''}`;
+    });
+});
+
+// Lightbox
+let currentImages = [];
+let currentIndex = 0;
+let currentName = '';
+
+cards.forEach(card => {
+    card.addEventListener('click', () => {
+        currentImages = card.dataset.images.split(',');
+        currentName = card.dataset.name;
+        currentIndex = 0;
+        openLightbox();
+    });
+});
+
+function openLightbox() {
+    const lb = document.getElementById('lightbox');
+    lb.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    updateLightbox();
+}
+
+function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('open');
+    document.body.style.overflow = '';
+}
+
+function navLightbox(dir) {
+    currentIndex = (currentIndex + dir + currentImages.length) % currentImages.length;
+    updateLightbox();
+}
+
+function updateLightbox() {
+    document.getElementById('lightboxImg').src = currentImages[currentIndex];
+    document.getElementById('lightboxCaption').textContent = `${currentName} — Foto ${currentIndex + 1} de ${currentImages.length}`;
+
+    const thumbsContainer = document.getElementById('lightboxThumbs');
+    thumbsContainer.innerHTML = '';
+    currentImages.forEach((img, i) => {
+        const thumb = document.createElement('div');
+        thumb.className = `lightbox-thumb${i === currentIndex ? ' active' : ''}`;
+        thumb.innerHTML = `<img src="${img}" alt="">`;
+        thumb.onclick = (e) => { e.stopPropagation(); currentIndex = i; updateLightbox(); };
+        thumbsContainer.appendChild(thumb);
+    });
+}
+
+// Keyboard navigation
+document.addEventListener('keydown', (e) => {
+    if (!document.getElementById('lightbox').classList.contains('open')) return;
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft') navLightbox(-1);
+    if (e.key === 'ArrowRight') navLightbox(1);
+});
+
+// Close lightbox on backdrop click
+document.getElementById('lightbox').addEventListener('click', (e) => {
+    if (e.target === document.getElementById('lightbox')) closeLightbox();
+});
+
+// Mobile menu
+document.querySelectorAll('.navbar-links a').forEach(link => {
+    link.addEventListener('click', () => document.querySelector('.navbar-links').classList.remove('open'));
+});
+</script>
+
+</body>
+</html>
