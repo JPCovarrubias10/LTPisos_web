@@ -311,14 +311,17 @@
         }
         @media (max-width: 768px) {
             /* Navbar: ocultar fila inferior, mostrar hamburguesa */
-            .navbar-bottom { display: none; }
-            .navbar-links {
+            .navbar-bottom {
                 display: none; position: fixed; top: 70px; left: 0; right: 0;
-                background: white; flex-direction: column; padding: 1rem 1.5rem;
-                border-bottom: 1px solid var(--border); gap: 1rem; z-index: 999;
+                z-index: 999; border-top: none;
+            }
+            .navbar-bottom.open { display: block; }
+            .navbar-links {
+                display: flex; flex-direction: column; padding: 1rem 1.5rem;
+                background: white;
+                border-bottom: 1px solid var(--border); gap: 1rem;
                 box-shadow: 0 8px 24px rgba(0,0,0,0.08);
             }
-            .navbar-links.open { display: flex; }
             .menu-toggle { display: block; }
             /* Hero */
             .hero { padding-top: 70px; min-height: 100svh; }
@@ -366,7 +369,7 @@
             <img src="img/logo.jpg" alt="LTPisos - Consultoría y Diseño">
         </a>
         <div class="lang-switcher"><a href="index.html" style="color:var(--orange);">ES</a><span>|</span><a href="index-en.html" style="color:var(--gray-mid);">EN</a></div>
-        <button class="menu-toggle" onclick="document.querySelector('.navbar-links').classList.toggle('open')" aria-label="Menu">
+        <button class="menu-toggle" onclick="document.querySelector('.navbar-bottom').classList.toggle('open')" aria-label="Menu">
             <span></span><span></span><span></span>
         </button>
     </div>
@@ -1001,7 +1004,7 @@ window.addEventListener('scroll', () => {
 
 // Close mobile menu on link click
 document.querySelectorAll('.navbar-links a').forEach(link => {
-    link.addEventListener('click', () => document.querySelector('.navbar-links').classList.remove('open'));
+    link.addEventListener('click', () => document.querySelector('.navbar-bottom').classList.remove('open'));
 });
 </script>
 

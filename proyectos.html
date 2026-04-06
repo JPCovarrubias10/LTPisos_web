@@ -194,14 +194,17 @@
         /* ===== RESPONSIVE ===== */
         @media (max-width: 992px) { .projects-grid { grid-template-columns: repeat(2, 1fr); } }
         @media (max-width: 768px) {
-            .navbar-links {
+            .navbar-bottom {
                 display: none; position: fixed; top: 70px; left: 0; right: 0;
-                background: white; flex-direction: column; padding: 1rem 1.5rem;
-                border-bottom: 1px solid var(--border); gap: 1rem; z-index: 999;
+                z-index: 999; border-top: none;
+            }
+            .navbar-bottom.open { display: block; }
+            .navbar-links {
+                display: flex; flex-direction: column; padding: 1rem 1.5rem;
+                background: white;
+                border-bottom: 1px solid var(--border); gap: 1rem;
                 box-shadow: 0 8px 24px rgba(0,0,0,0.08);
             }
-            .navbar-links.open { display: flex; }
-            .navbar-bottom { display: none; }
             .menu-toggle { display: block; }
             .hero { padding-top: 70px !important; }
             .projects-grid { grid-template-columns: 1fr; }
@@ -265,7 +268,7 @@
             <img src="img/logo.jpg" alt="LTPisos">
         </a>
         <div class="lang-switcher"><a href="proyectos.html" style="color:var(--orange);">ES</a><span>|</span><a href="proyectos-en.html" style="color:var(--gray-mid);">EN</a></div>
-        <button class="menu-toggle" onclick="document.querySelector('.navbar-links').classList.toggle('open')">
+        <button class="menu-toggle" onclick="document.querySelector('.navbar-bottom').classList.toggle('open')">
             <span></span><span></span><span></span>
         </button>
     </div>
@@ -718,7 +721,7 @@ document.getElementById('lightbox').addEventListener('click', (e) => {
 
 // Mobile menu
 document.querySelectorAll('.navbar-links a').forEach(link => {
-    link.addEventListener('click', () => document.querySelector('.navbar-links').classList.remove('open'));
+    link.addEventListener('click', () => document.querySelector('.navbar-bottom').classList.remove('open'));
 });
 </script>
 
