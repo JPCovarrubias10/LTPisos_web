@@ -66,7 +66,7 @@
 
         /* ===== HERO ===== */
         .hero {
-            padding-top: 108px; min-height: 92vh; display: flex; align-items: center;
+            padding-top: 70px; min-height: 92vh; display: flex; align-items: center;
             background: linear-gradient(135deg, #1a1a2e 0%, #2d2d44 50%, #3d2e1e 100%);
             position: relative; overflow: hidden;
         }
@@ -305,21 +305,43 @@
             .services-grid, .projects-grid, .diff-grid { grid-template-columns: repeat(2, 1fr); }
             .two-col, .contact-grid { grid-template-columns: 1fr; gap: 2rem; }
             .process-steps { grid-template-columns: repeat(2, 1fr); }
+            #optislab .section-inner > div,
+            #socios .section-inner > div { grid-template-columns: 1fr !important; gap: 2rem !important; }
         }
         @media (max-width: 768px) {
+            /* Navbar: ocultar fila inferior, mostrar hamburguesa */
+            .navbar-bottom { display: none; }
             .navbar-links {
-                display: none; position: absolute; top: 108px; left: 0; right: 0;
-                background: white; flex-direction: column; padding: 1rem 2rem;
-                border-bottom: 1px solid var(--border); gap: 1rem;
+                display: none; position: fixed; top: 70px; left: 0; right: 0;
+                background: white; flex-direction: column; padding: 1rem 1.5rem;
+                border-bottom: 1px solid var(--border); gap: 1rem; z-index: 999;
+                box-shadow: 0 8px 24px rgba(0,0,0,0.08);
             }
             .navbar-links.open { display: flex; }
             .menu-toggle { display: block; }
+            /* Hero */
+            .hero { padding-top: 70px; min-height: 100svh; }
+            .hero h1 { font-size: 1.85rem; line-height: 1.2; }
+            .hero p { font-size: 0.95rem; }
+            .hero-stats { flex-direction: column; gap: 1.5rem; }
+            .hero-content .btn { display: block; width: fit-content; }
+            .btn-outline { margin-left: 0 !important; margin-top: 0.75rem; }
+            /* Secciones */
+            section { padding: 3.5rem 1.25rem; }
+            /* Grids → columna única */
             .services-grid, .floors-grid, .projects-grid, .diff-grid { grid-template-columns: 1fr; }
             .process-steps { grid-template-columns: 1fr; }
-            .hero-stats { flex-direction: column; gap: 1.5rem; }
-            .hero h1 { font-size: 2rem; }
-            section { padding: 4rem 1.5rem; }
-            .btn-outline { margin-left: 0; margin-top: 0.5rem; }
+            /* Grids con estilos inline (OptiSlab, Socios) */
+            #optislab .section-inner > div,
+            #socios .section-inner > div { grid-template-columns: 1fr !important; gap: 2rem !important; }
+            /* Grid de logos */
+            .logo-grid { grid-template-columns: repeat(3, 1fr) !important; gap: 0.6rem; }
+            .logo-item { height: 60px; padding: 0.6rem 0.4rem; }
+            /* Footer */
+            .footer-inner { flex-direction: column; text-align: center; }
+            .footer-links { justify-content: center; }
+            /* Contacto */
+            .contact-form { padding: 1.5rem; }
         }
 
         /* ===== ANIMATIONS ===== */
