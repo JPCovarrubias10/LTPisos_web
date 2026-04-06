@@ -21,7 +21,7 @@
             --border: #E0E0E0;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        html { scroll-behavior: smooth; font-size: 16px; }
+        html { scroll-behavior: smooth; font-size: 16px; overflow-x: hidden; }
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             color: var(--text-body); background: var(--bg-white); line-height: 1.7;
@@ -342,6 +342,11 @@
             .footer-links { justify-content: center; }
             /* Contacto */
             .contact-form { padding: 1.5rem; }
+            /* Hero content padding override */
+            .hero-content { padding: 2rem 1.25rem; }
+            /* Prevent any element from overflowing */
+            .section-inner, .hero-content { max-width: 100%; }
+            img { max-width: 100%; height: auto; }
         }
 
         /* ===== ANIMATIONS ===== */

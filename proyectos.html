@@ -20,7 +20,7 @@
             --border: #E0E0E0;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        html { scroll-behavior: smooth; font-size: 16px; }
+        html { scroll-behavior: smooth; font-size: 16px; overflow-x: hidden; }
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             color: var(--text-body);
@@ -205,6 +205,8 @@
             .hero { padding-top: 70px !important; }
             .projects-grid { grid-template-columns: 1fr; }
             .page-header h1 { font-size: 1.8rem; }
+            .hero-content, .page-header { padding-left: 1.25rem; padding-right: 1.25rem; }
+            img { max-width: 100%; height: auto; }
         }
 
         /* ===== ANIMATIONS ===== */
