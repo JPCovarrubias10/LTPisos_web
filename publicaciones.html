@@ -17,13 +17,18 @@
         body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; color: var(--text-body); background: var(--bg-white); line-height: 1.7;
             overflow-x: hidden; /* Prevent horizontal scroll on mobile (iOS Safari) */ }
 
-        /* NAVBAR */
+        /* NAVBAR (2-row) */
         .navbar { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgba(255,255,255,0.97); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); transition: box-shadow 0.3s; }
         .navbar.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.08); }
-        .navbar-inner { max-width: 1200px; margin: 0 auto; padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; height: 72px; }
-        .navbar-logo img { height: 42px; }
-        .navbar-links { display: flex; gap: 2rem; list-style: none; }
-        .navbar-links a { text-decoration: none; color: var(--gray-dark); font-size: 0.9rem; font-weight: 500; letter-spacing: 0.02em; transition: color 0.2s; position: relative; }
+        .navbar-top { max-width: 1200px; margin: 0 auto; padding: 0.5rem 2rem; display: flex; align-items: center; justify-content: space-between; }
+        .navbar-logo img { height: 52px; }
+        .lang-switcher { display:flex; align-items:center; gap:0.25rem; font-size:0.82rem; }
+        .lang-switcher a { font-weight:700; text-decoration:none; letter-spacing:0.05em; }
+        .lang-switcher span { color:var(--border); }
+        .navbar-bottom { border-top: 1px solid var(--border); background: rgba(255,255,255,0.97); }
+        .navbar-inner { max-width: 1200px; margin: 0 auto; padding: 0 2rem; display: flex; align-items: center; justify-content: center; height: 44px; }
+        .navbar-links { display: flex; gap: 1.75rem; list-style: none; }
+        .navbar-links a { text-decoration: none; color: var(--gray-dark); font-size: 0.875rem; font-weight: 500; letter-spacing: 0.02em; transition: color 0.2s; position: relative; }
         .navbar-links a:hover, .navbar-links a.active { color: var(--orange); }
         .navbar-links a::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px; background: var(--orange); transition: width 0.3s; }
         .navbar-links a:hover::after, .navbar-links a.active::after { width: 100%; }
@@ -31,7 +36,7 @@
         .menu-toggle span { display: block; width: 24px; height: 2px; background: var(--gray-dark); margin: 5px 0; transition: 0.3s; }
 
         /* PAGE HEADER */
-        .page-header { padding-top: 70px; background: linear-gradient(135deg, #1a1a2e 0%, #2d2d44 50%, #3d2e1e 100%); color: white; text-align: center; }
+        .page-header { padding-top: 116px; background: linear-gradient(135deg, #1a1a2e 0%, #2d2d44 50%, #3d2e1e 100%); color: white; text-align: center; }
         .page-header-inner { max-width: 1200px; margin: 0 auto; padding: 4rem 2rem 3rem; }
         .page-header h1 { font-size: clamp(2rem, 4vw, 2.8rem); font-weight: 700; margin-bottom: 1rem; }
         .page-header p { font-size: 1.05rem; opacity: 0.85; max-width: 680px; margin: 0 auto; }
