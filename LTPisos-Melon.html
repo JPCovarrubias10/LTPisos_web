@@ -534,12 +534,12 @@ body {
     </div>
     <div class="f">
       <span class="photo-label">Foto del rack</span>
-      <div class="upload-zone" onclick="document.getElementById('rack_foto').click()">
-        <input type="file" id="rack_foto" accept="image/*" multiple onchange="addThumb(event,'rack_thumbs')" onclick="event.stopPropagation()">
+      <label class="upload-zone" for="rack_foto">
+        <input type="file" id="rack_foto" accept="image/*" multiple onchange="addThumb(event,'rack_thumbs')">
         <div class="uz-ico">📸</div>
         <div class="uz-txt">Fotografiar o seleccionar</div>
         <div class="uz-sub">Puedes adjuntar varias fotos</div>
-      </div>
+      </label>
       <div class="thumbs" id="rack_thumbs"></div>
     </div>
   </div>
@@ -558,12 +558,12 @@ body {
     </div>
     <div class="f">
       <span class="photo-label">Foto del montacargas</span>
-      <div class="upload-zone" onclick="document.getElementById('mc_foto').click()">
-        <input type="file" id="mc_foto" accept="image/*" multiple onchange="addThumb(event,'mc_thumbs')" onclick="event.stopPropagation()">
+      <label class="upload-zone" for="mc_foto">
+        <input type="file" id="mc_foto" accept="image/*" multiple onchange="addThumb(event,'mc_thumbs')">
         <div class="uz-ico">📸</div>
         <div class="uz-txt">Fotografiar o seleccionar</div>
         <div class="uz-sub">Puedes adjuntar varias fotos</div>
-      </div>
+      </label>
       <div class="thumbs" id="mc_thumbs"></div>
     </div>
   </div>
@@ -582,12 +582,12 @@ body {
     </div>
     <div class="f">
       <span class="photo-label">Foto de la transpaleta</span>
-      <div class="upload-zone" onclick="document.getElementById('tp_foto').click()">
-        <input type="file" id="tp_foto" accept="image/*" multiple onchange="addThumb(event,'tp_thumbs')" onclick="event.stopPropagation()">
+      <label class="upload-zone" for="tp_foto">
+        <input type="file" id="tp_foto" accept="image/*" multiple onchange="addThumb(event,'tp_thumbs')">
         <div class="uz-ico">📸</div>
         <div class="uz-txt">Fotografiar o seleccionar</div>
         <div class="uz-sub">Puedes adjuntar varias fotos</div>
-      </div>
+      </label>
       <div class="thumbs" id="tp_thumbs"></div>
     </div>
   </div>
@@ -606,12 +606,12 @@ body {
     </div>
     <div class="f">
       <span class="photo-label">Foto de la zona / mercadería</span>
-      <div class="upload-zone" onclick="document.getElementById('dist_foto').click()">
-        <input type="file" id="dist_foto" accept="image/*" multiple onchange="addThumb(event,'dist_thumbs')" onclick="event.stopPropagation()">
+      <label class="upload-zone" for="dist_foto">
+        <input type="file" id="dist_foto" accept="image/*" multiple onchange="addThumb(event,'dist_thumbs')">
         <div class="uz-ico">📸</div>
         <div class="uz-txt">Fotografiar o seleccionar</div>
         <div class="uz-sub">Puedes adjuntar varias fotos</div>
-      </div>
+      </label>
       <div class="thumbs" id="dist_thumbs"></div>
     </div>
   </div>
@@ -625,12 +625,12 @@ body {
     </div>
     <div class="f">
       <span class="photo-label">Foto de referencia</span>
-      <div class="upload-zone" onclick="document.getElementById('otro_foto').click()">
-        <input type="file" id="otro_foto" accept="image/*" multiple onchange="addThumb(event,'otro_thumbs')" onclick="event.stopPropagation()">
+      <label class="upload-zone" for="otro_foto">
+        <input type="file" id="otro_foto" accept="image/*" multiple onchange="addThumb(event,'otro_thumbs')">
         <div class="uz-ico">📸</div>
         <div class="uz-txt">Fotografiar o seleccionar</div>
         <div class="uz-sub">Puedes adjuntar varias fotos</div>
-      </div>
+      </label>
       <div class="thumbs" id="otro_thumbs"></div>
     </div>
   </div>
@@ -645,8 +645,8 @@ body {
 
   <div class="f">
     <label>Plano de arquitectura</label>
-    <div class="upload-zone" onclick="document.getElementById('plano_foto').click()">
-      <input type="file" id="plano_foto" accept="image/*,application/pdf" multiple onchange="addThumb(event,'plano_thumbs')" onclick="event.stopPropagation()">
+    <label class="upload-zone" for="plano_foto">
+      <input type="file" id="plano_foto" accept="image/*,application/pdf" multiple onchange="addThumb(event,'plano_thumbs')">
       <div class="uz-ico">📐</div>
       <div class="uz-txt">Fotografiar plano o adjuntar archivo</div>
       <div class="uz-sub">JPG · PNG · PDF · Múltiples archivos</div>
