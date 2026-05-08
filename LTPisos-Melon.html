@@ -123,7 +123,14 @@ body {
 .pl.done { color: var(--grey3); }
 
 /* ── Steps ── */
-.step { display: none; padding: 22px 22px; animation: up .25s ease; }
+.step { display: none; animation: up .25s ease; padding: 16px; }
+.step-card {
+  background: var(--white);
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  padding: 22px 22px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
 .step.active { display: block; }
 @keyframes up { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
 
@@ -421,6 +428,7 @@ body {
 
 <!-- ══ STEP 1 ══ -->
 <div class="step active" id="step1">
+<div class="step-card">
   <div class="step-hd">
     <div class="step-n">01</div>
     <div><h2>Datos de la Obra</h2><p>Información general del proyecto</p></div>
@@ -459,9 +467,11 @@ body {
     <input id="vendedorContacto" type="text" placeholder="+56 9 xxxx xxxx · correo@empresa.cl">
   </div>
 </div>
+</div>
 
 <!-- ══ STEP 2 ══ -->
 <div class="step" id="step2">
+<div class="step-card">
   <div class="step-hd">
     <div class="step-n">02</div>
     <div><h2>Mecánica de Suelo</h2><p>Caracterización del terreno</p></div>
@@ -510,9 +520,11 @@ body {
     </div>
   </div>
 </div>
+</div>
 
 <!-- ══ STEP 3 ══ -->
 <div class="step" id="step3">
+<div class="step-card">
   <div class="step-hd">
     <div class="step-n">03</div>
     <div><h2>Cargas</h2><p>Selecciona todas las que aplican</p></div>
@@ -653,9 +665,11 @@ body {
     </div>
   </div>
 </div>
+</div>
 
 <!-- ══ STEP 4 ══ -->
 <div class="step" id="step4">
+<div class="step-card">
   <div class="step-hd">
     <div class="step-n">04</div>
     <div><h2>Planos y Fotos</h2><p>Foto del plano de arquitectura</p></div>
@@ -676,6 +690,7 @@ body {
     <label>Notas adicionales</label>
     <textarea id="notasFinales" placeholder="Cualquier información relevante para el diseño..."></textarea>
   </div>
+</div>
 </div>
 
 <!-- ══ SUCCESS ══ -->
