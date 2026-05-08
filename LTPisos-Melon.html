@@ -31,14 +31,26 @@
 }
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 body {
-  background: var(--bg);
+  background: #D8DCE6;
   color: var(--grey1);
   font-family: 'Barlow', sans-serif;
   min-height: 100vh;
-  padding-bottom: 90px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
 }
 
-.wrap { max-width: 520px; margin: 0 auto; }
+.app-shell {
+  width: 100%;
+  max-width: 640px;
+  min-height: 100vh;
+  background: var(--bg);
+  box-shadow: 0 0 40px rgba(0,0,0,0.15);
+  padding-bottom: 90px;
+  position: relative;
+}
+
+.wrap { max-width: 640px; margin: 0 auto; }
 
 /* ── Header ── */
 .header {
@@ -47,10 +59,7 @@ body {
   padding: 22px 22px 18px;
   width: 100%;
 }
-.header-inner {
-  max-width: 960px;
-  margin: 0 auto;
-}
+.header-inner { width: 100%; }
 .header-top {
   display: flex;
   align-items: center;
@@ -97,7 +106,7 @@ body {
 
 /* ── Progress ── */
 .progress-wrap { background: var(--white); border-bottom: 1px solid var(--border); padding: 14px 22px; width: 100%; }
-.progress-inner { max-width: 960px; margin: 0 auto; }
+.progress-inner { width: 100%; }
 .progress { display: flex; gap: 4px; margin-bottom: 8px; }
 .pb { flex: 1; height: 4px; border-radius: 0; background: var(--surface2); transition: background .3s; }
 .pb.done { background: var(--accent); opacity: .45; }
@@ -375,6 +384,7 @@ body {
 </style>
 </head>
 <body>
+<div class="app-shell">
 
 <!-- Header -->
 <div class="header">
@@ -959,5 +969,6 @@ function resetForm() {
 
 upd();
 </script>
+</div><!-- /app-shell -->
 </body>
 </html>
