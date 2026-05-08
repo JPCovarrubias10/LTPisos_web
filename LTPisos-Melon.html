@@ -661,9 +661,23 @@ body {
               <input id="rack_hombro" type="number" placeholder="Ej: 9.5" step="0.1" min="0">
             </div>
             <div class="f">
-              <label>N° posiciones</label>
-              <input id="rack_pos" type="number" placeholder="Ej: 1500" min="0">
+              <label>N° de niveles</label>
+              <select id="rack_niveles">
+                <option value="">— Selecciona —</option>
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+                <option>5</option>
+                <option>6</option>
+                <option>7</option>
+                <option>8</option>
+              </select>
             </div>
+          </div>
+          <div class="f">
+            <label>N° posiciones</label>
+            <input id="rack_pos" type="number" placeholder="Ej: 1500" min="0">
           </div>
           <div class="f">
             <label>Descripción adicional</label>
@@ -826,6 +840,13 @@ body {
 
 <script>
 const TG_TOKEN = '8715580185:AAFOvOllZhn86QyNVkwdRmtodBJClMQ9k9I';
+
+// Correlativo de fichas
+function getNextFolio() {
+  const n = parseInt(localStorage.getItem('ltpisos_folio') || '0') + 1;
+  localStorage.setItem('ltpisos_folio', n);
+  return String(n).padStart(4, '0');
+}
 const TG_CHAT  = '8174022142';
 const total = 4;
 let cur = 1;
@@ -939,11 +960,13 @@ async function generate() {
     det += '\n  OTRO\n    Descripción: ' + v('otro_desc');
 
   const fecha = new Date().toLocaleDateString('es-CL', {day:'2-digit',month:'2-digit',year:'numeric'});
+  const folio = getNextFolio();
 
   const txt =
 `========================================
   LTPISOS SpA — FICHA TÉCNICA DE OBRA
   Fecha: ${fecha}
+  Folio: N° ${folio}
 ========================================
 
   OBRA
