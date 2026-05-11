@@ -566,7 +566,7 @@ body {
         </div>
 
         <div class="f">
-          <label>Tipo de suelo <span class="req">*</span></label>
+          <label>Descripción Suelo Natural <span class="req">*</span></label>
           <select id="sueloTipo">
             <option value="">— Selecciona —</option>
             <option>Arcilla</option>
@@ -676,8 +676,8 @@ body {
             </div>
           </div>
           <div class="f">
-            <label>N° posiciones</label>
-            <input id="rack_pos" type="number" placeholder="Ej: 1500" min="0">
+            <label>Peso estimado Pallet (kg)</label>
+            <input id="rack_pos" type="number" placeholder="Ej: 1200" min="0">
           </div>
           <div class="f">
             <label>Descripción adicional</label>
@@ -745,7 +745,7 @@ body {
         <div class="cd" id="cd-dist">
           <div class="cd-title">📦 Carga distribuida</div>
           <div class="f">
-            <label>Intensidad (t/m²)</label>
+            <label>Carga (Tn/m²)</label>
             <input id="dist_val" type="number" placeholder="Ej: 3.5" step="0.1" min="0">
           </div>
           <div class="f">
@@ -949,13 +949,13 @@ async function generate() {
 
   let det = '';
   if (document.getElementById('c_rack').checked)
-    det += '\n  RACKS\n    Altura al hombro: ' + v('rack_hombro') + ' m\n    N° posiciones: ' + v('rack_pos') + '\n    Descripción: ' + v('rack_desc');
+    det += '\n  RACKS\n    Altura al hombro: ' + v('rack_hombro') + ' m\n    Peso pallet:   ' + v('rack_pos') + ' kg\n    Descripción: ' + v('rack_desc');
   if (document.getElementById('c_mc').checked)
     det += '\n  MONTACARGAS\n    Modelo/marca: ' + v('mc_modelo') + '\n    Descripción: ' + v('mc_desc');
   if (document.getElementById('c_tp').checked)
     det += '\n  TRANSPALETA\n    Modelo/marca: ' + v('tp_modelo') + '\n    Descripción: ' + v('tp_desc');
   if (document.getElementById('c_dist').checked)
-    det += '\n  CARGA DISTRIBUIDA\n    Intensidad: ' + v('dist_val') + ' t/m²\n    Descripción: ' + v('dist_desc');
+    det += '\n  CARGA DISTRIBUIDA\n    Carga: ' + v('dist_val') + ' Tn/m²\n    Descripción: ' + v('dist_desc');
   if (document.getElementById('c_otro').checked)
     det += '\n  OTRO\n    Descripción: ' + v('otro_desc');
 
