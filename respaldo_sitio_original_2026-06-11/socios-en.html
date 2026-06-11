@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Strategic Partners · LTPisos</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --orange: #D4792C; --orange-light: #E8943F; --orange-dark: #B5631E;
+            --gray-dark: #4A4A4A; --gray-mid: #6B6B6B; --gray-light: #9B9B9B;
+            --bg-light: #F7F7F5; --bg-white: #FFFFFF;
+            --text-dark: #2C2C2C; --text-body: #4A4A4A; --border: #E0E0E0;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        img { max-width: 100%; height: auto; }
+        html { scroll-behavior: smooth; font-size: 16px; overflow-x: hidden; }
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; color: var(--text-body); background: var(--bg-white); line-height: 1.7;
+            overflow-x: hidden; /* Prevent horizontal scroll on mobile (iOS Safari) */ }
+
+        /* NAVBAR (2-row) */
+        .navbar { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgba(255,255,255,0.97); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); transition: box-shadow 0.3s; }
+        .navbar.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.08); }
+        .navbar-top { max-width: 1200px; margin: 0 auto; padding: 0.5rem 2rem; display: flex; align-items: center; justify-content: space-between; }
+        .navbar-logo img { height: 52px; }
+        .lang-switcher { display:flex; align-items:center; gap:0.25rem; font-size:0.82rem; }
+        .lang-switcher a { font-weight:700; text-decoration:none; letter-spacing:0.05em; }
+        .lang-switcher span { color:var(--border); }
+        .navbar-bottom { border-top: 1px solid var(--border); background: rgba(255,255,255,0.97); }
+        .navbar-inner { max-width: 1200px; margin: 0 auto; padding: 0 2rem; display: flex; align-items: center; justify-content: center; height: 44px; }
+        .navbar-links { display: flex; gap: 1.75rem; list-style: none; }
+        .navbar-links a { text-decoration: none; color: var(--gray-dark); font-size: 0.875rem; font-weight: 500; letter-spacing: 0.02em; transition: color 0.2s; position: relative; }
+        .navbar-links a:hover, .navbar-links a.active { color: var(--orange); }
+        .navbar-links a::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px; background: var(--orange); transition: width 0.3s; }
+        .navbar-links a:hover::after, .navbar-links a.active::after { width: 100%; }
+        .menu-toggle { display: none; background: none; border: none; cursor: pointer; padding: 8px; }
+        .menu-toggle span { display: block; width: 24px; height: 2px; background: var(--gray-dark); margin: 5px 0; transition: 0.3s; }
+
+        /* PAGE HEADER */
+        .page-header { padding-top: 116px; background: linear-gradient(135deg, #1a1a2e 0%, #2d2d44 50%, #3d2e1e 100%); color: white; text-align: center; }
+        .page-header-inner { max-width: 1200px; margin: 0 auto; padding: 4rem 2rem 3rem; }
+        .page-header h1 { font-size: clamp(2rem, 4vw, 2.8rem); font-weight: 700; margin-bottom: 1rem; }
+        .page-header p { font-size: 1.05rem; opacity: 0.85; max-width: 680px; margin: 0 auto; }
+        .breadcrumb { margin-top: 1.5rem; font-size: 0.85rem; opacity: 0.6; }
+        .breadcrumb a { color: white; text-decoration: none; }
+        .breadcrumb a:hover { text-decoration: underline; }
+
+        /* SECTIONS */
+        section { padding: 5rem 2rem; }
+        .section-inner { max-width: 1200px; margin: 0 auto; }
+
+        /* PARTNER CARDS — large format for 2 partners */
+        .partners-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2.5rem; }
+        .partner-card { background: white; border: 1px solid var(--border); border-radius: 16px; padding: 2.5rem; transition: all 0.3s; }
+        .partner-card:hover { transform: translateY(-4px); box-shadow: 0 16px 48px rgba(0,0,0,0.09); border-color: var(--orange); }
+        .partner-header { display: flex; align-items: center; gap: 1.25rem; margin-bottom: 1.5rem; }
+        .partner-logo { height: 52px; max-width: 140px; object-fit: contain; flex-shrink: 0; }
+        .partner-icon { height: 52px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .partner-icon img { height: 52px; max-width: 140px; object-fit: contain; }
+        .partner-name { font-size: 1.25rem; font-weight: 700; color: var(--text-dark); margin-bottom: 0.2rem; }
+        .partner-link { font-size: 0.82rem; color: var(--orange); text-decoration: none; font-weight: 500; transition: color 0.2s; }
+        .partner-link:hover { color: var(--orange-dark); text-decoration: underline; }
+        .partner-desc { font-size: 0.92rem; color: var(--gray-mid); line-height: 1.8; margin-bottom: 1.25rem; }
+        .partner-tag { display: inline-block; background: var(--bg-light); border: 1px solid var(--border); border-radius: 6px; padding: 4px 12px; font-size: 0.75rem; font-weight: 600; color: var(--gray-mid); text-transform: uppercase; letter-spacing: 0.06em; margin-right: 0.5rem; margin-bottom: 0.4rem; }
+
+        /* CTA */
+        .cta-section { background: linear-gradient(135deg, #1a1a2e 0%, #3d2e1e 100%); color: white; text-align: center; padding: 5rem 2rem; }
+        .cta-section h2 { font-size: 2rem; margin-bottom: 1rem; }
+        .cta-section p { font-size: 1.05rem; opacity: 0.85; max-width: 560px; margin: 0 auto 2rem; }
+        .btn { display: inline-block; padding: 14px 32px; border-radius: 6px; font-size: 0.95rem; font-weight: 600; text-decoration: none; transition: all 0.3s; cursor: pointer; border: none; }
+        .btn-primary { background: var(--orange); color: white; }
+        .btn-primary:hover { background: var(--orange-dark); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(212,121,44,0.3); }
+
+        /* FOOTER */
+        footer { background: #1a1a2e; color: rgba(255,255,255,0.7); padding: 3rem 2rem; }
+        .footer-inner { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+        .footer-inner p { font-size: 0.85rem; }
+        .footer-links { display: flex; gap: 1.5rem; list-style: none; flex-wrap: wrap; }
+        .footer-links a { color: rgba(255,255,255,0.7); text-decoration: none; font-size: 0.85rem; transition: color 0.2s; }
+        .footer-links a:hover { color: var(--orange-light); }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            /* Navbar móvil: el menú se despliega dentro del navbar fijo */
+            .navbar-bottom { display: none; border-top: 1px solid var(--border); }
+            .navbar-bottom.open { display: block; }
+            .navbar-inner { height: auto; padding: 0; display: block; max-width: 100%; }
+            .navbar-links { display: flex; flex-direction: column; gap: 0; list-style: none; background: white; }
+            .navbar-links li { border-bottom: 1px solid var(--border); }
+            .navbar-links li:last-child { border-bottom: none; }
+            .navbar-links a { display: block; padding: 0.9rem 1.5rem; font-size: 1rem; color: var(--gray-dark); font-weight: 500; }
+            .navbar-links a:hover { color: var(--orange); background: var(--bg-light); }
+            .menu-toggle { display: block; }
+            .hero { padding-top: 70px !important; }
+            section { padding: 3.5rem 1.5rem; }
+            .section-inner { max-width: 100%; overflow-x: hidden; }
+            .partners-row { grid-template-columns: 1fr !important; }
+            .footer-links { gap: 0.75rem 1rem; justify-content: center; }
+            .navbar, .navbar-top { max-width: 100%; overflow-x: hidden; }
+        }
+
+        /* ANIMATIONS */
+        .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+        .fade-in.visible { opacity: 1; transform: translateY(0); }
+    </style>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-82344328"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag("js", new Date());
+        gtag("config", "G-82344328");
+    </script>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+    <div class="navbar-top">
+        <a href="index-en.html" class="navbar-logo">
+            <img src="img/logo.jpg" alt="LTPisos">
+        </a>
+        <div class="lang-switcher"><a href="socios.html" style="color:var(--gray-mid);">ES</a><span>|</span><a href="socios-en.html" style="color:var(--orange);">EN</a></div>
+        <button class="menu-toggle" aria-label="Menu">
+            <span></span><span></span><span></span>
+        </button>
+    </div>
+    <div class="navbar-bottom">
+        <div class="navbar-inner">
+            <ul class="navbar-links">
+            <li><a href="index-en.html">Home</a></li>
+            <li><a href="index-en.html#enfoque">About Us</a></li>
+            <li><a href="index-en.html#servicios">Services</a></li>
+            <li><a href="optislab-en.html">OptiSlab</a></li>
+            <li><a href="proyectos-en.html">Projects</a></li>
+            <li><a href="equipo-en.html">Team</a></li>
+            <li><a href="socios-en.html" class="active">Strategic Partners</a></li>
+            <li><a href="publicaciones-en.html">Publications</a></li>
+            <li><a href="index-en.html#contacto">Contact</a></li>
+            <li><a href="https://www.linkedin.com/company/15079852/" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:0.35rem;"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg> LinkedIn</a></li>
+        </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+    <div class="page-header-inner">
+        <h1>Our Strategic Partners</h1>
+        <p>We work with global leaders in pavement technology and concrete reinforcement to deliver world-class engineering solutions</p>
+        <div class="breadcrumb"><a href="index-en.html">Home</a> / Strategic Partners</div>
+    </div>
+</div>
+
+<!-- SOCIOS -->
+<section>
+    <div class="section-inner">
+        <div class="partners-row" style="grid-template-columns: repeat(3, 1fr);">
+
+            <!-- TCPavements -->
+            <div class="partner-card fade-in">
+                <div class="partner-header">
+                    <img src="https://tcpavements.cl/img/logo.jpg" alt="TCPavements" class="partner-logo">
+                    <div>
+                        <div class="partner-name">TCPavements</div>
+                        <a href="https://tcpavements.cl" target="_blank" rel="noopener" class="partner-link">tcpavements.cl ↗</a>
+                        <a href="https://www.linkedin.com/search/results/all/?keywords=tcpavements&origin=RICH_QUERY_SUGGESTION&spellCorrectionEnabled=false&heroEntityKey=urn%3Ali%3Aorganization%3A3486285&position=0" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:0.35rem; font-size:0.8rem; color:#0a66c2; font-weight:600; text-decoration:none; margin-top:0.25rem;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="#0a66c2"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                            LinkedIn
+                        </a>
+                    </div>
+                </div>
+                <p class="partner-desc">Leaders in concrete pavement innovation. Their patented Optimized Slab Geometry (TCP®) technology enables reduced thicknesses and optimized structural design, eliminating the need for traditional reinforcement and maximizing pavement service life. Present in over 70 countries.</p>
+                <div>
+                    <span class="partner-tag">Pavements</span>
+                    <span class="partner-tag">Structural Design</span>
+                    <span class="partner-tag">TCP®</span>
+                </div>
+            </div>
+
+            <!-- FORTA -->
+            <div class="partner-card fade-in">
+                <div class="partner-header">
+                    <img src="img/logos/forta.jpg" alt="FORTA" class="partner-logo" onerror="this.outerHTML='<span style=&quot;font-weight:700; font-size:1.4rem; color:#D4792C; letter-spacing:0.05em;&quot;>FORTA</span>'">
+                    <div>
+                        <div class="partner-name">FORTA Corporation</div>
+                        <a href="https://fortacorp.com" target="_blank" rel="noopener" class="partner-link">fortacorp.com ↗</a>
+                    </div>
+                </div>
+                <p class="partner-desc">Global leader in concrete reinforcement through synthetic fibers. Their flagship product, FORTA-FERRO®, is a high-performance macro fiber designed to control shrinkage and increase residual load capacity, successfully replacing welded wire mesh in industrial floors.</p>
+                <div>
+                    <span class="partner-tag">Fibers</span>
+                    <span class="partner-tag">FORTA-FERRO®</span>
+                    <span class="partner-tag">Reinforcement</span>
+                </div>
+            </div>
+
+            <!-- Litoral Ingeniería -->
+            <div class="partner-card fade-in">
+                <div class="partner-header">
+                    <img src="img/logos/litoral.jpg" alt="Litoral Ingeniería" class="partner-logo" onerror="this.outerHTML='<span style=&quot;font-weight:700; font-size:1.1rem; color:#D4792C; letter-spacing:0.02em;&quot;>Litoral</span>'">
+                    <div>
+                        <div class="partner-name">Litoral Ingeniería Ltda.</div>
+                    </div>
+                </div>
+                <p class="partner-desc">Company specialized in concrete technology, focused on continuous technical consulting, mix optimization, thermal control in massive concrete and on-site training. Works with top-tier construction companies in Chile and Latin America.</p>
+                <div>
+                    <span class="partner-tag">Concrete</span>
+                    <span class="partner-tag">Technical Consulting</span>
+                    <span class="partner-tag">Quality Control</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-section">
+    <h2>Want to be a partner with LTPisos?</h2>
+    <p>We are always looking for strategic alliances with leading companies in the industrial floor value chain.</p>
+    <a href="index-en.html#contacto" class="btn btn-primary">Contact Us</a>
+</div>
+
+<!-- FOOTER -->
+<footer>
+    <div class="footer-inner">
+        <div>
+            <p style="font-weight:600; color:rgba(255,255,255,0.9); margin-bottom:0.25rem;">LTPisos Diseño e Ingeniería S.p.A.</p>
+            <p style="font-size:0.8rem;">© 2026 · Chile · Peru · Colombia · Mexico · Costa Rica · USA · pablo@ltpisos.com</p>
+        </div>
+        <ul class="footer-links">
+            <li><a href="index-en.html">Home</a></li>
+            <li><a href="index-en.html#servicios">Services</a></li>
+            <li><a href="optislab-en.html">OptiSlab</a></li>
+            <li><a href="proyectos-en.html">Projects</a></li>
+            <li><a href="equipo-en.html">Team</a></li>
+            <li><a href="socios-en.html">Strategic Partners</a></li>
+            <li><a href="publicaciones-en.html">Publications</a></li>
+            <li><a href="index-en.html#contacto">Contact</a></li>
+            <li><a href="https://www.linkedin.com/company/15079852/" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:0.35rem;"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg> LinkedIn</a></li>
+        </ul>
+    </div>
+</footer>
+
+<script>
+window.addEventListener('scroll', () => {
+    document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+});
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+        if (entry.isIntersecting) setTimeout(() => entry.target.classList.add('visible'), i * 100);
+    });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+// Mobile menu toggle — lock body scroll while open
+document.querySelector('.menu-toggle').addEventListener('click', function() {
+    const nb = document.querySelector('.navbar-bottom');
+    const isOpen = nb.classList.toggle('open');
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+});
+// Close mobile menu on link click
+document.querySelectorAll('.navbar-links a').forEach(link => {
+    link.addEventListener('click', () => {
+        document.querySelector('.navbar-bottom').classList.remove('open');
+        document.body.style.overflow = '';
+    });
+});
+</script>
+</body>
+</html>

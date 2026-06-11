@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LTPisos - Consultoría y Diseño de Pisos Industriales</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --orange: #D4792C;
+            --orange-light: #E8943F;
+            --orange-dark: #B5631E;
+            --gray-dark: #4A4A4A;
+            --gray-mid: #6B6B6B;
+            --gray-light: #9B9B9B;
+            --bg-light: #F7F7F5;
+            --bg-white: #FFFFFF;
+            --text-dark: #2C2C2C;
+            --text-body: #4A4A4A;
+            --border: #E0E0E0;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; font-size: 16px; overflow-x: hidden; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--text-body); background: var(--bg-white); line-height: 1.7;
+            overflow-x: hidden; /* Prevent horizontal scroll on mobile (iOS Safari) */
+        }
+
+        /* ===== NAVBAR (2-row) ===== */
+        .navbar {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+            background: rgba(255,255,255,0.97); backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border); transition: box-shadow 0.3s;
+        }
+        .navbar.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.08); }
+        .navbar-top {
+            max-width: 1200px; margin: 0 auto; padding: 0.5rem 2rem;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .navbar-logo img { height: 52px; }
+        .lang-switcher { display:flex; align-items:center; gap:0.25rem; font-size:0.82rem; }
+        .lang-switcher a { font-weight:700; text-decoration:none; letter-spacing:0.05em; }
+        .lang-switcher span { color:var(--border); }
+        .navbar-bottom {
+            border-top: 1px solid var(--border);
+            background: rgba(255,255,255,0.97);
+        }
+        .navbar-inner {
+            max-width: 1200px; margin: 0 auto; padding: 0 2rem;
+            display: flex; align-items: center; justify-content: center; height: 44px;
+        }
+        .navbar-links { display: flex; gap: 1.75rem; list-style: none; }
+        .navbar-links a {
+            text-decoration: none; color: var(--gray-dark); font-size: 0.875rem;
+            font-weight: 500; letter-spacing: 0.02em; transition: color 0.2s; position: relative;
+        }
+        .navbar-links a:hover, .navbar-links a.active { color: var(--orange); }
+        .navbar-links a::after {
+            content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px;
+            background: var(--orange); transition: width 0.3s;
+        }
+        .navbar-links a:hover::after, .navbar-links a.active::after { width: 100%; }
+        .menu-toggle { display: none; background: none; border: none; cursor: pointer; padding: 8px; }
+        .menu-toggle span { display: block; width: 24px; height: 2px; background: var(--gray-dark); margin: 5px 0; transition: 0.3s; }
+
+        /* ===== HERO ===== */
+        .hero {
+            padding-top: 70px; min-height: 92vh; display: flex; align-items: center;
+            background: linear-gradient(135deg, #1a1a2e 0%, #2d2d44 50%, #3d2e1e 100%);
+            position: relative; overflow: hidden;
+        }
+        .hero-slide {
+            position: absolute; inset: 0;
+            background-size: cover; background-position: center;
+            opacity: 0; transition: opacity 1.6s ease-in-out;
+        }
+        .hero-slide.active { opacity: 0.22; }
+        .hero-content {
+            position: relative; max-width: 1200px; margin: 0 auto; padding: 4rem 2rem; color: white; width: 100%;
+        }
+        .hero-tag {
+            display: inline-block; background: var(--orange); color: white;
+            padding: 6px 18px; border-radius: 20px; font-size: 0.8rem;
+            font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 1.5rem;
+        }
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 3.8rem); font-weight: 700;
+            line-height: 1.15; margin-bottom: 1.5rem; max-width: 750px;
+        }
+        .hero h1 span { color: var(--orange-light); }
+        .hero p {
+            font-size: 1.1rem; line-height: 1.8; max-width: 620px; opacity: 0.9; margin-bottom: 2.5rem;
+        }
+        .hero-stats { display: flex; gap: 3rem; margin-top: 2rem; }
+        .hero-stat h3 { font-size: 2.5rem; font-weight: 700; color: var(--orange-light); }
+        .hero-stat p { font-size: 0.85rem; opacity: 0.8; margin-bottom: 0; }
+        .btn {
+            display: inline-block; padding: 14px 32px; border-radius: 6px;
+            font-size: 0.95rem; font-weight: 600; text-decoration: none;
+            transition: all 0.3s; cursor: pointer; border: none;
+        }
+        .btn-primary { background: var(--orange); color: white; }
+        .btn-primary:hover { background: var(--orange-dark); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(212,121,44,0.3); }
+        .btn-outline { background: transparent; color: white; border: 2px solid rgba(255,255,255,0.4); margin-left: 1rem; }
+        .btn-outline:hover { border-color: white; background: rgba(255,255,255,0.1); }
+
+        /* ===== SECTIONS ===== */
+        section { padding: 6rem 2rem; }
+        .section-inner { max-width: 1200px; margin: 0 auto; }
+        .section-header { text-align: center; margin-bottom: 4rem; }
+        .section-header h2 { font-size: 2.2rem; font-weight: 700; color: var(--text-dark); margin-bottom: 1rem; }
+        .section-header p { font-size: 1.05rem; color: var(--gray-mid); max-width: 650px; margin: 0 auto; }
+        .accent-line { width: 50px; height: 3px; background: var(--orange); margin: 0 auto 1.5rem; border-radius: 2px; }
+
+        /* ===== PROBLEMA / ENFOQUE ===== */
+        .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
+        .content-block h3 { font-size: 1.5rem; color: var(--text-dark); margin-bottom: 1rem; font-weight: 700; }
+        .content-block p { margin-bottom: 1.2rem; color: var(--text-body); font-size: 0.95rem; line-height: 1.8; }
+        .highlight-box {
+            background: #FFF8F0; border-left: 4px solid var(--orange); padding: 1.5rem 2rem;
+            border-radius: 0 8px 8px 0; margin: 1.5rem 0;
+        }
+        .highlight-box p { margin-bottom: 0; font-size: 0.92rem; color: var(--gray-dark); }
+
+        /* ===== PROCESO ===== */
+        #proceso { background: var(--bg-light); }
+        .process-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; margin-top: 1rem; }
+        .process-step {
+            text-align: center; padding: 2rem 1.5rem; background: white;
+            border-radius: 12px; border: 1px solid var(--border); transition: all 0.3s;
+            position: relative;
+        }
+        .process-step:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.08); }
+        .step-number {
+            width: 48px; height: 48px; background: var(--orange); color: white;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 1.2rem; margin: 0 auto 1.2rem;
+        }
+        .process-step h4 { font-size: 1rem; color: var(--text-dark); margin-bottom: 0.6rem; }
+        .process-step p { font-size: 0.85rem; color: var(--gray-mid); line-height: 1.6; }
+
+        /* ===== SERVICIOS ===== */
+        .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+        .service-card {
+            background: var(--bg-white); border: 1px solid var(--border); border-radius: 12px;
+            padding: 2.5rem 2rem; transition: all 0.3s;
+        }
+        .service-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.08); border-color: var(--orange); }
+        .service-icon {
+            width: 56px; height: 56px; background: linear-gradient(135deg, var(--orange), var(--orange-light));
+            border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem;
+        }
+        .service-icon svg { width: 28px; height: 28px; fill: none; stroke: white; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+        .service-card h3 { font-size: 1.15rem; color: var(--text-dark); margin-bottom: 0.75rem; }
+        .service-card p { font-size: 0.9rem; color: var(--gray-mid); line-height: 1.7; }
+
+        /* ===== DIFERENCIADORES ===== */
+        #diferenciadores { background: var(--bg-light); }
+        .diff-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+        .diff-card {
+            background: white; border-radius: 12px; padding: 2rem; border: 1px solid var(--border);
+            transition: all 0.3s;
+        }
+        .diff-card:hover { box-shadow: 0 8px 30px rgba(0,0,0,0.06); transform: translateY(-2px); }
+        .diff-icon {
+            font-size: 2rem; margin-bottom: 1rem;
+        }
+        .diff-card h4 { font-size: 1.05rem; color: var(--text-dark); margin-bottom: 0.6rem; }
+        .diff-card p { font-size: 0.88rem; color: var(--gray-mid); line-height: 1.7; }
+
+        /* ===== TIPOS DE PISOS ===== */
+        .floors-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem; }
+        .floor-card {
+            background: white; border-radius: 12px; overflow: hidden;
+            border: 1px solid var(--border); transition: all 0.3s;
+        }
+        .floor-card:hover { box-shadow: 0 12px 40px rgba(0,0,0,0.08); transform: translateY(-2px); }
+        .floor-card-header { padding: 2rem 2rem 1rem; display: flex; align-items: center; gap: 1rem; }
+        .floor-number {
+            width: 42px; height: 42px; background: var(--orange); color: white; border-radius: 10px;
+            display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.1rem; flex-shrink: 0;
+        }
+        .floor-card-header h3 { font-size: 1.1rem; color: var(--text-dark); }
+        .floor-card-body { padding: 0 2rem 2rem; }
+        .floor-card-body p { font-size: 0.88rem; color: var(--gray-mid); line-height: 1.7; }
+        .floor-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem; }
+        .floor-tag { padding: 4px 12px; background: #FFF3E6; color: var(--orange-dark); border-radius: 4px; font-size: 0.75rem; font-weight: 500; }
+
+        /* ===== PROYECTOS ===== */
+        #proyectos { background: var(--bg-light); }
+        .projects-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+        .project-card {
+            border-radius: 12px; overflow: hidden; background: white;
+            border: 1px solid var(--border); transition: all 0.3s;
+        }
+        .project-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.1); }
+        .project-img { height: 220px; overflow: hidden; }
+        .project-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+        .project-card:hover .project-img img { transform: scale(1.05); }
+        .project-info { padding: 1.5rem; }
+        .project-info h3 { font-size: 1.05rem; color: var(--text-dark); margin-bottom: 0.5rem; }
+        .project-info p { font-size: 0.85rem; color: var(--gray-mid); line-height: 1.6; }
+        .project-meta { display: flex; gap: 1rem; margin-top: 0.75rem; }
+        .project-meta span { font-size: 0.75rem; color: var(--orange); font-weight: 600; background: #FFF3E6; padding: 3px 10px; border-radius: 4px; }
+
+        /* ===== CLIENTES ===== */
+        .logo-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 1.25rem;
+            margin-top: 2.5rem;
+        }
+        .logo-item {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 1.2rem 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            height: 80px;
+        }
+        .logo-item:hover {
+            border-color: var(--orange);
+            box-shadow: 0 4px 16px rgba(212,121,44,0.12);
+            transform: translateY(-2px);
+        }
+        .logo-item img {
+            max-width: 100%;
+            max-height: 46px;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            filter: grayscale(100%);
+            opacity: 0.65;
+            transition: all 0.3s;
+        }
+        .logo-item:hover img {
+            filter: grayscale(0%);
+            opacity: 1;
+        }
+        @media (max-width: 992px) { .logo-grid { grid-template-columns: repeat(4, 1fr); } }
+        @media (max-width: 600px)  { .logo-grid { grid-template-columns: repeat(3, 1fr); } }
+
+        /* ===== SOCIOS ===== */
+        .partner-card {
+            background: white; border: 1px solid var(--border); border-radius: 12px;
+            padding: 1.5rem; transition: all 0.3s;
+        }
+        .partner-card:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0,0,0,0.08); border-color: var(--orange); }
+        .partner-header {
+            display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;
+        }
+        .partner-icon {
+            width: 52px; height: 52px; border-radius: 10px; background: var(--bg-light);
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 0.75rem; color: var(--orange-dark);
+            letter-spacing: 0.03em; flex-shrink: 0; border: 1px solid var(--border);
+        }
+        .partner-name { font-size: 1rem; font-weight: 600; color: var(--text-dark); margin-bottom: 0.15rem; }
+        .partner-link {
+            font-size: 0.75rem; color: var(--orange); text-decoration: none; font-weight: 500;
+            transition: color 0.2s;
+        }
+        .partner-link:hover { color: var(--orange-dark); }
+        .partner-desc { font-size: 0.85rem; color: var(--gray-mid); line-height: 1.65; margin: 0; }
+
+        /* ===== CONTACTO ===== */
+        .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; }
+        .contact-info h3 { font-size: 1.6rem; color: var(--text-dark); margin-bottom: 1rem; }
+        .contact-info p { margin-bottom: 1.5rem; }
+        .contact-item { display: flex; align-items: flex-start; gap: 1rem; margin-bottom: 1.5rem; }
+        .contact-icon {
+            width: 44px; height: 44px; background: #FFF3E6; border-radius: 10px;
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .contact-icon svg { width: 20px; height: 20px; stroke: var(--orange); fill: none; stroke-width: 2; }
+        .contact-item strong { display: block; font-size: 0.85rem; color: var(--text-dark); margin-bottom: 2px; }
+        .contact-item span { font-size: 0.9rem; color: var(--gray-mid); }
+        .contact-form { background: var(--bg-light); padding: 2.5rem; border-radius: 12px; }
+        .form-group { margin-bottom: 1.25rem; }
+        .form-group label { display: block; font-size: 0.85rem; font-weight: 500; color: var(--text-dark); margin-bottom: 0.5rem; }
+        .form-group input, .form-group textarea {
+            width: 100%; padding: 12px 16px; border: 1px solid var(--border); border-radius: 8px;
+            font-family: inherit; font-size: 0.9rem; transition: border-color 0.2s; background: white;
+        }
+        .form-group input:focus, .form-group textarea:focus { outline: none; border-color: var(--orange); }
+        .form-group textarea { resize: vertical; min-height: 120px; }
+
+        /* ===== FOOTER ===== */
+        footer { background: #1a1a2e; color: rgba(255,255,255,0.7); padding: 3rem 2rem; }
+        .footer-inner {
+            max-width: 1200px; margin: 0 auto; display: flex;
+            justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;
+        }
+        .footer-inner p { font-size: 0.85rem; }
+        .footer-links { display: flex; gap: 1.5rem; list-style: none; flex-wrap: wrap; }
+        .footer-links a { color: rgba(255,255,255,0.7); text-decoration: none; font-size: 0.85rem; transition: color 0.2s; }
+        .footer-links a:hover { color: var(--orange-light); }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 992px) {
+            .services-grid, .projects-grid, .diff-grid { grid-template-columns: repeat(2, 1fr); }
+            .two-col, .contact-grid { grid-template-columns: 1fr; gap: 2rem; }
+            .process-steps { grid-template-columns: repeat(2, 1fr); }
+            #optislab .section-inner > div,
+            #socios .section-inner > div { grid-template-columns: 1fr !important; gap: 2rem !important; }
+        }
+        @media (max-width: 768px) {
+            /* Navbar móvil: el menú se despliega dentro del navbar fijo */
+            .navbar-bottom { display: none; border-top: 1px solid var(--border); }
+            .navbar-bottom.open { display: block; }
+            .navbar-inner { height: auto; padding: 0; display: block; max-width: 100%; }
+            .navbar-links { display: flex; flex-direction: column; gap: 0; list-style: none; background: white; }
+            .navbar-links li { border-bottom: 1px solid var(--border); }
+            .navbar-links li:last-child { border-bottom: none; }
+            .navbar-links a { display: block; padding: 0.9rem 1.5rem; font-size: 1rem; color: var(--gray-dark); font-weight: 500; }
+            .navbar-links a:hover { color: var(--orange); background: var(--bg-light); }
+            .menu-toggle { display: block; }
+            /* Hero */
+            .hero { padding-top: 70px; min-height: 100svh; }
+            .hero h1 { font-size: 1.85rem; line-height: 1.2; }
+            .hero p { font-size: 0.95rem; }
+            .hero-stats { flex-direction: column; gap: 1.5rem; }
+            .hero-content .btn { display: block; width: fit-content; }
+            .btn-outline { margin-left: 0 !important; margin-top: 0.75rem; }
+            /* Secciones */
+            section { padding: 3.5rem 1.25rem; }
+            /* Grids → columna única */
+            .services-grid, .floors-grid, .projects-grid, .diff-grid { grid-template-columns: 1fr; }
+            .process-steps { grid-template-columns: 1fr; }
+            /* Grids con estilos inline (OptiSlab, Socios) */
+            #optislab .section-inner > div,
+            #socios .section-inner > div { grid-template-columns: 1fr !important; gap: 2rem !important; }
+            /* Grid de logos */
+            .logo-grid { grid-template-columns: repeat(3, 1fr) !important; gap: 0.6rem; }
+            .logo-item { height: 60px; padding: 0.6rem 0.4rem; }
+            /* Footer */
+            .footer-inner { flex-direction: column; text-align: center; }
+            .footer-links { justify-content: center; }
+            /* Contacto */
+            .contact-form { padding: 1.5rem; }
+            /* Hero content padding override */
+            .hero-content { padding: 2rem 1.25rem; }
+            /* Prevent any element from overflowing */
+            .section-inner, .hero-content { max-width: 100%; overflow-x: hidden; }
+            img { max-width: 100%; height: auto; }
+            .footer-links { gap: 0.75rem 1rem; justify-content: center; }
+            .navbar, .navbar-top { max-width: 100%; overflow-x: hidden; }
+        }
+
+        /* ===== ANIMATIONS ===== */
+        .fade-in { opacity: 0; transform: translateY(30px); transition: opacity 0.6s ease, transform 0.6s ease; }
+        .fade-in.visible { opacity: 1; transform: translateY(0); }
+    </style>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-82344328"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag("js", new Date());
+        gtag("config", "G-82344328");
+    </script>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+    <div class="navbar-top">
+        <a href="#inicio" class="navbar-logo">
+            <img src="img/logo.jpg" alt="LTPisos - Consultoría y Diseño">
+        </a>
+        <div class="lang-switcher"><a href="index.html" style="color:var(--orange);">ES</a><span>|</span><a href="index-en.html" style="color:var(--gray-mid);">EN</a></div>
+        <button class="menu-toggle" aria-label="Menu">
+            <span></span><span></span><span></span>
+        </button>
+    </div>
+    <div class="navbar-bottom">
+        <div class="navbar-inner">
+            <ul class="navbar-links">
+            <li><a href="#inicio">Inicio</a></li>
+            <li><a href="#enfoque">Quiénes Somos</a></li>
+            <li><a href="#servicios">Servicios</a></li>
+            <li><a href="optislab.html">OptiSlab</a></li>
+            <li><a href="proyectos.html">Proyectos</a></li>
+            <li><a href="equipo.html">Equipo</a></li>
+            <li><a href="socios.html">Socios Estratégicos</a></li>
+            <li><a href="publicaciones.html">Publicaciones</a></li>
+            <li><a href="#contacto">Contacto</a></li>
+            <li><a href="https://www.linkedin.com/company/15079852/" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:0.35rem;"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg> LinkedIn</a></li>
+        </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- ============================================================ -->
+<!-- HERO -->
+<!-- ============================================================ -->
+<section class="hero" id="inicio">
+    <div class="hero-slide active" style="background-image:url('img/proyectos/Walmart_1.jpg')"></div>
+    <div class="hero-slide" style="background-image:url('img/proyectos/cial_1.jpg')"></div>
+    <div class="hero-slide" style="background-image:url('img/proyectos/bodenor_enea_7.jpg')"></div>
+    <div class="hero-slide" style="background-image:url('img/proyectos/bluexpress_new_1.jpg')"></div>
+    <div class="hero-content">
+        <h1>Diseño e Ingeniería <span>Especializada</span> de Pisos Industriales</h1>
+        <p>LTPisos desarrolla soluciones técnicas para centros de distribución, retail, industria e infraestructura, combinando más de 20 años de experiencia, software propio y criterio de ingeniería para diseñar pisos de alto desempeño.</p>
+        <div>
+            <a href="proyectos.html" class="btn btn-primary">Ver Proyectos</a>
+            <a href="#contacto" class="btn btn-outline">Contactar a un Especialista</a>
+        </div>
+        <div class="hero-stats">
+            <div class="hero-stat">
+                <h3>20+</h3>
+                <p>Años de experiencia</p>
+            </div>
+            <div class="hero-stat">
+                <h3>100+</h3>
+                <p>Proyectos ejecutados</p>
+            </div>
+            <div class="hero-stat">
+                <h3>2,5MM+</h3>
+                <p>m² construidos</p>
+            </div>
+            <div class="hero-stat">
+                <h3>6</h3>
+                <p>Países con presencia</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- ENFOQUE: EL PROBLEMA + NUESTRA FORMA DE TRABAJAR -->
+<!-- ============================================================ -->
+<section id="enfoque">
+    <div class="section-inner">
+        <div class="section-header fade-in">
+            <div class="accent-line"></div>
+            <h2>Quiénes Somos</h2>
+            <p>Una firma especializada en diseño de pisos industriales, con más de 20 años de experiencia y presencia en Chile, Perú, Colombia, Costa Rica, México y Estados Unidos</p>
+        </div>
+
+        <div class="two-col">
+            <div class="content-block fade-in">
+                <h3>Experiencia técnica e independencia</h3>
+                <p>LTPisos es una empresa especializada en el diseño de pisos industriales y pavimentos de hormigón, con más de 20 años de experiencia, más de 100 proyectos ejecutados y más de 2,5 millones de m² construidos en Chile, Perú, Colombia, Costa Rica, México y Estados Unidos.</p>
+                <p>Trabajamos junto a mandantes, desarrolladores, constructoras y oficinas de ingeniería, aportando una mirada técnica especializada en estructuras sobre suelo para operaciones exigentes en los sectores logístico, retail e industrial.</p>
+                <div class="highlight-box">
+                    <p>Una firma con respaldo técnico reconocido, presencia internacional comprobada y más de dos décadas de proyectos en operación.</p>
+                </div>
+            </div>
+            <div class="content-block fade-in">
+                <h3>Ingeniería al servicio del proyecto</h3>
+                <p>La diferenciación de LTPisos está en su profundidad técnica y en su independencia respecto de productos y proveedores. Esto permite analizar cada proyecto desde la ingeniería, comparando alternativas de piso según cargas, tipo de operación, geometría, nivel de planeidad, condiciones del suelo, presupuesto y constructibilidad.</p>
+                <p>El resultado son soluciones ajustadas a la realidad del proyecto, no propuestas genéricas ni condicionadas por una tecnología específica.</p>
+                <div class="highlight-box">
+                    <p>No existe una solución única que funcione para todos los proyectos. La elección del tipo de piso es una decisión técnica que debe evaluarse caso a caso con criterio de ingeniería.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- PROCESO DE TRABAJO -->
+<!-- ============================================================ -->
+<section id="proceso">
+    <div class="section-inner">
+        <div class="section-header fade-in">
+            <div class="accent-line"></div>
+            <h2>Cómo Trabajamos</h2>
+            <p>Una metodología probada que da trazabilidad técnica a cada decisión de diseño, desde el levantamiento de información hasta el apoyo en obra</p>
+        </div>
+        <div class="process-steps">
+            <div class="process-step fade-in">
+                <div class="step-number">1</div>
+                <h4>Diagnóstico y Requerimientos</h4>
+                <p>Recibimos la información base del proyecto: tipo de uso, cargas, layout de racks, equipos de operación, condiciones del suelo, restricciones de obra y expectativas de desempeño del piso.</p>
+            </div>
+            <div class="process-step fade-in">
+                <div class="step-number">2</div>
+                <h4>Análisis y Selección del Tipo de Piso</h4>
+                <p>Evaluamos las alternativas de diseño de manera independiente de productos, recomendando la opción con mejor equilibrio entre desempeño, costo y constructibilidad.</p>
+            </div>
+            <div class="process-step fade-in">
+                <div class="step-number">3</div>
+                <h4>Diseño y Documentación</h4>
+                <p>Desarrollamos el diseño estructural con software propio (OptiSlab), generamos planos de detalle, especificaciones técnicas y la documentación necesaria para respaldar la solución.</p>
+            </div>
+            <div class="process-step fade-in">
+                <div class="step-number">4</div>
+                <h4>Apoyo en Construcción y Entrega</h4>
+                <p>Acompañamos la ejecución con visitas técnicas y asesoría en terreno. Revisamos cumplimiento de especificaciones y apoyamos en la resolución de imprevistos durante la construcción.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- DIFERENCIADORES -->
+<!-- ============================================================ -->
+<section id="diferenciadores">
+    <div class="section-inner">
+        <div class="section-header fade-in">
+            <div class="accent-line"></div>
+            <h2>Por Qué Elegirnos</h2>
+            <p>Una asesoría realmente independiente que genera valor en el largo plazo</p>
+        </div>
+        <div class="diff-grid">
+            <div class="diff-card fade-in">
+                <div class="diff-icon" style="color: var(--orange);">&#9878;</div>
+                <h4>Independencia Total</h4>
+                <p>No estamos vinculados a ningún producto, proveedor o tecnología específica. Recomendamos soluciones con total objetividad, asegurando la mejor alternativa para cada proyecto.</p>
+            </div>
+            <div class="diff-card fade-in">
+                <div class="diff-icon" style="color: var(--orange);">&#9881;</div>
+                <h4>Modelación Avanzada</h4>
+                <p>Utilizamos herramientas de modelación que representan de mejor manera el comportamiento real del piso, reduciendo la incertidumbre y permitiendo factores de seguridad más ajustados.</p>
+            </div>
+            <div class="diff-card fade-in">
+                <div class="diff-icon" style="color: var(--orange);">&#10003;</div>
+                <h4>Valor en el Largo Plazo</h4>
+                <p>Pisos con mejor funcionamiento en el tiempo, mayor planicidad, menores niveles de agrietamiento, mejor desempeño de juntas y por lo tanto reducción en necesidades de mantenimiento. Hemos verificado pisos con más de 15 años en excelente estado.</p>
+            </div>
+            <div class="diff-card fade-in">
+                <div class="diff-icon" style="color: var(--orange);">&#9733;</div>
+                <h4>Experiencia Comprobada</h4>
+                <p>Más de 15 años participando en proyectos de gran escala en Chile y Latinoamérica: centros de distribución, instalaciones industriales, bodegas logísticas y proyectos especiales.</p>
+            </div>
+            <div class="diff-card fade-in">
+                <div class="diff-icon" style="color: var(--orange);">&#128202;</div>
+                <h4>Diseñar Bien Desde el Inicio</h4>
+                <p>El diseño de un piso industrial es una decisión estructural crítica. Tomar una buena decisión desde el inicio es la diferencia entre un piso que funciona y uno que genera problemas.</p>
+            </div>
+            <div class="diff-card fade-in">
+                <div class="diff-icon" style="color: var(--orange);">&#127758;</div>
+                <h4>Presencia Internacional</h4>
+                <p>Proyectos ejecutados en Chile, Perú, Colombia, EE. UU., México y Costa Rica. Experiencia en entender cómo se comportan los pisos en operación real en distintos contextos.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SERVICIOS / TECNOLOGÍAS -->
+<!-- ============================================================ -->
+<section id="servicios">
+    <div class="section-inner">
+        <div class="section-header fade-in">
+            <div class="accent-line"></div>
+            <h2>Nuestros Servicios</h2>
+            <p>Servicios orientados a apoyar todas las etapas del proyecto, desde el diseño inicial hasta la evaluación de pisos existentes, con foco en soluciones técnicamente sólidas, construibles y consistentes con la operación real del cliente</p>
+        </div>
+        <div class="services-grid">
+            <div class="service-card fade-in">
+                <div class="service-icon">
+                    <svg viewBox="0 0 24 24"><path d="M2 20h20M5 20V10l7-7 7 7v10M9 20v-6h6v6"/></svg>
+                </div>
+                <h3>Elección y Diseño de Pisos Industriales</h3>
+                <p>Desarrollo completo del diseño estructural: evaluación de cargas, selección del tipo de losa, definición de espesores, juntas, detalles constructivos, especificaciones técnicas y memoria de cálculo.</p>
+            </div>
+            <div class="service-card fade-in">
+                <div class="service-icon">
+                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg>
+                </div>
+                <h3>Asesoría Técnica en Terreno</h3>
+                <p>Apoyo profesional durante la construcción para revisar criterios de diseño, resolver dudas técnicas y contribuir a una correcta ejecución del piso en obra.</p>
+            </div>
+            <div class="service-card fade-in">
+                <div class="service-icon">
+                    <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                </div>
+                <h3>Consultoría de Pisos Existentes</h3>
+                <p>Evaluación técnica de pisos con deterioro, fisuras, problemas de planeidad o desempeño operacional. Incluye diagnóstico y recomendaciones de reparación, mantención o mejora.</p>
+            </div>
+            <div class="service-card fade-in">
+                <div class="service-icon">
+                    <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+                </div>
+                <h3>Especificaciones Técnicas</h3>
+                <p>Redacción y revisión de especificaciones para licitaciones, contratos y construcción, incluyendo criterios de aceptación, tolerancias de planeidad, requisitos de materiales y detalles de juntas.</p>
+            </div>
+            <div class="service-card fade-in">
+                <div class="service-icon">
+                    <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                </div>
+                <h3>Control de Calidad</h3>
+                <p>Supervisión y medición de planeidad según normas aplicables, control de espesores, revisión de materiales y verificación del cumplimiento de procedimientos relevantes de construcción.</p>
+            </div>
+            <div class="service-card fade-in">
+                <div class="service-icon">
+                    <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                </div>
+                <h3>Capacitación Técnica</h3>
+                <p>Charlas y talleres para equipos de obra, mandantes y profesionales sobre diseño, construcción, control y mantenimiento de pisos industriales y pavimentos.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- TIPOS DE PISOS -->
+<!-- ============================================================ -->
+<section id="pisos" style="background: var(--bg-light);">
+    <div class="section-inner">
+        <div class="section-header fade-in">
+            <div class="accent-line"></div>
+            <h2>Tecnologías de Pisos Industriales</h2>
+            <p>Al ser una consultora independiente de productos, la recomendación se define caso a caso según la ingeniería del proyecto: operación, cargas, planeidad, presupuesto y condiciones del suelo</p>
+        </div>
+        <div class="floors-grid">
+            <div class="floor-card fade-in">
+                <div class="floor-card-header">
+                    <div class="floor-number">1</div>
+                    <h3>Piso Postensado</h3>
+                </div>
+                <div class="floor-card-body">
+                    <p>Sistema de alto rendimiento para tráfico intenso. Reduce o elimina juntas aserradas y es especialmente conveniente en operaciones exigentes con equipos de ruedas pequeñas y duras, donde la continuidad del piso y la durabilidad son críticas.</p>
+                    <div class="floor-tags">
+                        <span class="floor-tag">Sin juntas</span>
+                        <span class="floor-tag">Alto tráfico</span>
+                        <span class="floor-tag">Superplanos</span>
+                    </div>
+                </div>
+            </div>
+            <div class="floor-card fade-in">
+                <div class="floor-card-header">
+                    <div class="floor-number">2</div>
+                    <h3>Retracción Compensada o Estabilidad Volumétrica</h3>
+                </div>
+                <div class="floor-card-body">
+                    <p>Grandes paneles sin juntas aserradas, adecuados para operaciones de alto tráfico y pisos con altas exigencias de planeidad. Requiere un diseño y una ejecución cuidadosos de juntas, bordes y materiales para asegurar su desempeño.</p>
+                    <div class="floor-tags">
+                        <span class="floor-tag">Sin juntas aserradas</span>
+                        <span class="floor-tag">Alto tráfico</span>
+                        <span class="floor-tag">Alta planeidad</span>
+                    </div>
+                </div>
+            </div>
+            <div class="floor-card fade-in">
+                <div class="floor-card-header">
+                    <div class="floor-number">3</div>
+                    <h3>Losas Estratégicamente Reforzadas</h3>
+                </div>
+                <div class="floor-card-body">
+                    <p>Sistema ampliamente utilizado en centros de distribución. Considera paneles de tamaño controlado con barras de transferencia de carga en juntas y una disposición orientada a mejorar el comportamiento frente al tráfico y la durabilidad del piso.</p>
+                    <div class="floor-tags">
+                        <span class="floor-tag">2,5 - 4,5 m</span>
+                        <span class="floor-tag">Alta durabilidad</span>
+                        <span class="floor-tag">Versátil</span>
+                    </div>
+                </div>
+            </div>
+            <div class="floor-card fade-in">
+                <div class="floor-card-header">
+                    <div class="floor-number">4</div>
+                    <h3>Losas de menor Tamaño, Interlocking (2 a 3 m)</h3>
+                </div>
+                <div class="floor-card-body">
+                    <p>Solución probada para bodegas con racks altos y tráfico medio o bajo. Reducir el tamaño del panel mejora el control del alabeo y la transferencia de carga. Agregar fibra estructural mejora aún más el desempeño. No se recomienda para alto tráfico por el elevado mantenimiento de juntas, pero es una opción económica para pisos de bajo tráfico.</p>
+                    <div class="floor-tags">
+                        <span class="floor-tag">2 - 3 m</span>
+                        <span class="floor-tag">Control de alabeo</span>
+                        <span class="floor-tag">Racks de altura</span>
+                    </div>
+                </div>
+            </div>
+            <div class="floor-card fade-in">
+                <div class="floor-card-header">
+                    <div class="floor-number">5</div>
+                    <h3>Hormigón Reforzado con Fibra</h3>
+                </div>
+                <div class="floor-card-body">
+                    <p>El hormigón reforzado con fibra estructural incrementa de manera significativa la capacidad portante de la losa sin indicios visibles de fisuración, además de otorgar mayor flexibilidad al diseño. El HRF es compatible con diversas soluciones de pavimentación y, en presencia de grietas o fisuras perceptibles, la fibra contribuye a su contención, optimizando el desempeño frente a cargas aplicadas.</p>
+                    <div class="floor-tags">
+                        <span class="floor-tag">Mayor capacidad</span>
+                    </div>
+                </div>
+            </div>
+            <div class="floor-card fade-in">
+                <div class="floor-card-header">
+                    <div class="floor-number">6</div>
+                    <h3>Pavimentos de Tráfico Vehicular</h3>
+                </div>
+                <div class="floor-card-body">
+                    <p>Diseño de pavimentos para áreas con tráfico de camiones, autoelevadores y vehículos de patio, considerando fatiga, transferencia de carga y soporte estructural según las condiciones operativas de cada instalación. Usualmente se emplea la tecnología OptiPave System, lo que optimiza el rendimiento y reduce costos.</p>
+                    <div class="floor-tags">
+                        <span class="floor-tag">Tráfico pesado</span>
+                        <span class="floor-tag">Diseño por fatiga</span>
+                        <span class="floor-tag">Pavimentos exteriores</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- OPTISLAB TEASER -->
+<!-- ============================================================ -->
+<section id="optislab" style="background: var(--bg-light);">
+    <div class="section-inner">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:4rem; align-items:center;" class="fade-in">
+            <div>
+                <div style="display:inline-block; background:var(--orange); color:white; padding:5px 16px; border-radius:20px; font-size:0.75rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:1.25rem;">Tecnología Propia</div>
+                <h2 style="font-size:2.2rem; font-weight:700; color:var(--text-dark); margin-bottom:1rem; line-height:1.2;">OptiSlab<br><span style="color:var(--orange);">Software de Diseño</span></h2>
+                <p style="font-size:1rem; color:var(--gray-mid); line-height:1.8; margin-bottom:1.5rem;">Software propietario basado en redes neuronales entrenadas con ~1 millón de simulaciones FEM (Islab2000). Supera las limitaciones de ACI 360 y TR34, modelando el alabeo real, el tamaño de panel, la transferencia de carga real y la capacidad real de la losa.</p>
+                <div style="display:flex; flex-wrap:wrap; gap:0.6rem; margin-bottom:2rem;">
+                    <span style="padding:5px 14px; background:white; border:1px solid var(--border); border-radius:20px; font-size:0.8rem; color:var(--gray-dark);">Supera ACI 360 y TR34</span>
+                    <span style="padding:5px 14px; background:white; border:1px solid var(--border); border-radius:20px; font-size:0.8rem; color:var(--gray-dark);">~1M simulaciones FEM</span>
+                    <span style="padding:5px 14px; background:white; border:1px solid var(--border); border-radius:20px; font-size:0.8rem; color:var(--gray-dark);">Redes Neuronales</span>
+                    <span style="padding:5px 14px; background:white; border:1px solid var(--border); border-radius:20px; font-size:0.8rem; color:var(--gray-dark);">Univ. de Los Andes</span>
+                </div>
+                <a href="optislab.html" class="btn btn-primary">Conocer OptiSlab →</a>
+            </div>
+            <div style="background:white; border-radius:16px; padding:2.5rem; border:1px solid var(--border);">
+                <p style="font-size:0.75rem; font-weight:700; color:var(--orange); letter-spacing:0.1em; text-transform:uppercase; margin-bottom:1.25rem;">Capacidades</p>
+                <ul style="list-style:none; padding:0;">
+                    <li style="padding:0.5rem 0; border-bottom:1px solid var(--border); font-size:0.88rem; color:var(--text-body); display:flex; gap:0.75rem;"><span style="color:var(--orange); font-weight:700;">✓</span> Módulo de cargas: racks, montacargas, grúas</li>
+                    <li style="padding:0.5rem 0; border-bottom:1px solid var(--border); font-size:0.88rem; color:var(--text-body); display:flex; gap:0.75rem;"><span style="color:var(--orange); font-weight:700;">✓</span> Propiedades reales del hormigón: resistencia, fibra, retracción total, alabeo total, CTE</li>
+                    <li style="padding:0.5rem 0; border-bottom:1px solid var(--border); font-size:0.88rem; color:var(--text-body); display:flex; gap:0.75rem;"><span style="color:var(--orange); font-weight:700;">✓</span> Cálculo de K-Efectivo multicapa Palmer-Barber (estático y dinámico)</li>
+                    <li style="padding:0.5rem 0; border-bottom:1px solid var(--border); font-size:0.88rem; color:var(--text-body); display:flex; gap:0.75rem;"><span style="color:var(--orange); font-weight:700;">✓</span> Transferencia de carga en juntas (LTE) y uso de dovelas</li>
+                    <li style="padding:0.5rem 0; border-bottom:1px solid var(--border); font-size:0.88rem; color:var(--text-body); display:flex; gap:0.75rem;"><span style="color:var(--orange); font-weight:700;">✓</span> Análisis de punzonamiento bajo rack</li>
+                    <li style="padding:0.5rem 0; font-size:0.88rem; color:var(--text-body); display:flex; gap:0.75rem;"><span style="color:var(--orange); font-weight:700;">✓</span> Reportes técnicos documentados por proyecto</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- PROYECTOS DESTACADOS -->
+<!-- ============================================================ -->
+<section id="proyectos">
+    <div class="section-inner">
+        <div class="section-header fade-in">
+            <div class="accent-line"></div>
+            <h2>Proyectos Destacados</h2>
+            <p>Más de 100 proyectos ejecutados y 3 millones de m² construidos en Chile, Perú, Colombia, México y Estados Unidos</p>
+        </div>
+        <div class="projects-grid">
+            <div class="project-card fade-in">
+                <div class="project-img"><img src="img/proyectos/Walmart_1.jpg" alt="CD Walmart Lo Aguirre"></div>
+                <div class="project-info">
+                    <h3>CD Walmart Lo Aguirre</h3>
+                    <p>Piso de retracción compensada de 18 cm de espesor. 150.000 m² de piso interior. Hormigón Continua Melón, construido por Katemu. Bodega de alto tránsito, 6 posiciones de altura.</p>
+                    <div class="project-meta"><span>150.000 m²</span><span>Retracción Compensada</span></div>
+                </div>
+            </div>
+            <div class="project-card fade-in">
+                <div class="project-img"><img src="img/Falabella.jpg" alt="CD Falabella"></div>
+                <div class="project-info">
+                    <h3>CD Falabella</h3>
+                    <p>Piso de retracción compensada de 18 cm de espesor. 40.000 m² de piso interior. Hormigón Continua, construido por Katemu. Sorter multinivel automático, 8 posiciones de altura.</p>
+                    <div class="project-meta"><span>40.000 m²</span><span>Retracción Compensada</span></div>
+                </div>
+            </div>
+            <div class="project-card fade-in">
+                <div class="project-img"><img src="img/proyectos/bluexpress_1.jpg" alt="Blue Express"></div>
+                <div class="project-info">
+                    <h3>Blue Express — CD Logístico</h3>
+                    <p>2 zonas: retracción compensada en racks con trilaterales y losas de 2,5 m en sorter. 9 racks de altura, hormigón HF 4,2, base granular sobre mejoramiento de pumacita.</p>
+                    <div class="project-meta"><span>9 racks de altura</span><span>Retracción Compensada</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Link to full gallery -->
+        <div style="margin-top:2.5rem; text-align:center" class="fade-in">
+            <a href="proyectos.html" class="btn btn-primary">Ver Librería Completa de Proyectos</a>
+        </div>
+
+        <!-- Clientes con logos -->
+        <div style="margin-top:4rem;" class="fade-in">
+            <h3 style="font-size:1.2rem; color:var(--text-dark); margin-bottom:0.5rem; text-align:center;">Clientes que Confían en LTPisos</h3>
+            <p style="text-align:center; color:var(--gray-light); font-size:0.85rem; margin-bottom:0;">Mandantes, desarrolladores, constructoras y operadores de primer nivel en logística, retail, industria e infraestructura</p>
+            <div class="logo-grid">
+                <div class="logo-item"><img src="img/logos/walmart-chile-inmobiliaria1805.jpg" alt="Walmart"></div>
+                <div class="logo-item"><img src="img/logos/Falabella.png" alt="Falabella"></div>
+                <div class="logo-item"><img src="img/logos/Sodimac.jpg" alt="Sodimac"></div>
+                <div class="logo-item"><img src="img/logos/andina.jpg" alt="Andina - Coca-Cola"></div>
+                <div class="logo-item"><img src="img/logos/Bodenor.png" alt="Bodenor"></div>
+                <div class="logo-item"><img src="img/logos/cencosud-shopping-centers-sa1123.jpg" alt="Cencosud"></div>
+                <div class="logo-item"><img src="img/logos/paris1232.jpg" alt="Paris"></div>
+                <div class="logo-item"><img src="img/logos/lider1966.jpg" alt="Lider"></div>
+                <div class="logo-item"><img src="img/logos/tottus4316.jpg" alt="Tottus"></div>
+                <div class="logo-item"><img src="img/logos/unimarc1424.jpg" alt="Unimarc"></div>
+                <div class="logo-item"><img src="img/logos/santa-isabel6945.png" alt="Santa Isabel"></div>
+                <div class="logo-item"><img src="img/logos/super-bodega-acuenta1548.jpg" alt="Super Bodega Acuenta"></div>
+                <div class="logo-item"><img src="img/logos/kaufmann-mercedezbenz1915.jpg" alt="Kaufmann"></div>
+                <div class="logo-item"><img src="img/logos/blue_express.jpg" alt="Blue Express"></div>
+                <div class="logo-item"><img src="img/logos/Inrtetail.png" alt="InRetail"></div>
+                <div class="logo-item"><img src="img/logos/megacentro.jpg" alt="Megacentro"></div>
+                <div class="logo-item"><img src="img/logos/parque-arauco8619.jpg" alt="Parque Arauco"></div>
+                <div class="logo-item"><img src="img/logos/patio-gestion-inmobiliaria-sa1922.jpg" alt="Patio"></div>
+                <div class="logo-item"><img src="img/logos/logicentro.png" alt="Logicentro"></div>
+                <div class="logo-item"><img src="img/logos/Salfacorp.jpg" alt="Salfacorp"></div>
+                <div class="logo-item"><img src="img/logos/fortaleza.png" alt="Fortaleza"></div>
+                <div class="logo-item"><img src="img/logos/ccu1794.jpg" alt="CCU"></div>
+                <div class="logo-item"><img src="img/logos/agrosuper.png" alt="Agrosuper"></div>
+                <div class="logo-item"><img src="img/logos/vina-concha-y-toro-sa4578.jpg" alt="Concha y Toro"></div>
+                <div class="logo-item"><img src="img/logos/Colun.webp" alt="Colun"></div>
+                <div class="logo-item"><img src="img/logos/Melon.png" alt="Melón"></div>
+                <div class="logo-item"><img src="img/logos/constructora-inarco1676.jpg" alt="Inarco"></div>
+                <div class="logo-item"><img src="img/logos/besalco-construcciones-sa2067.png" alt="Besalco"></div>
+                <div class="logo-item"><img src="img/logos/constructora-altius1150.jpg" alt="Altius"></div>
+                <div class="logo-item"><img src="img/logos/ebco-energia-sa1925.png" alt="EBCO"></div>
+                <div class="logo-item"><img src="img/logos/Mersan.png" alt="Mersan"></div>
+                <div class="logo-item"><img src="img/logos/prodalam.png" alt="Prodalam"></div>
+                <div class="logo-item"><img src="img/logos/Cial.svg" alt="Cial"></div>
+                <div class="logo-item"><img src="img/logos/Beiersdorf.jpg" alt="Beiersdorf"></div>
+                <div class="logo-item"><img src="img/logos/Guacolda.jpg" alt="Guacolda"></div>
+                <div class="logo-item"><img src="img/logos/Pulimec.png" alt="Pulimec"></div>
+                <div class="logo-item"><img src="img/logos/komatsu-chile-sa1467.png" alt="Komatsu"></div>
+                <div class="logo-item"><img src="img/logos/Katemu.png" alt="Katemu"></div>
+                <div class="logo-item"><img src="img/logos/alusa-sa5794.png" alt="Alusa"></div>
+                <div class="logo-item"><img src="img/logos/cartocor.png" alt="Cartocor"></div>
+                <div class="logo-item"><img src="img/logos/agrocommerce.png" alt="Agrocommerce"></div>
+                <div class="logo-item"><img src="img/logos/ecolock.png" alt="Ecolock"></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SOCIOS ESTRATÉGICOS -->
+<!-- ============================================================ -->
+<section id="socios">
+    <div class="section-inner">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:4rem; align-items:center;" class="fade-in">
+            <div>
+                <div class="accent-line" style="margin:0 0 1.5rem;"></div>
+                <h2 style="font-size:2.2rem; font-weight:700; color:var(--text-dark); margin-bottom:1rem;">Socios<br><span style="color:var(--orange);">Estratégicos</span></h2>
+                <p style="font-size:1rem; color:var(--gray-mid); line-height:1.8; margin-bottom:2rem;">Trabajamos con líderes mundiales en tecnología de pavimentos y refuerzo de hormigón para entregar soluciones de ingeniería de primer nivel.</p>
+                <a href="socios.html" class="btn btn-primary">Conocer socios →</a>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:1.25rem;">
+                <!-- TCPavements -->
+                <div style="background:var(--bg-light); border-radius:12px; padding:1.25rem 1.5rem; border:1px solid var(--border); display:flex; align-items:center; gap:1rem;">
+                    <img src="https://tcpavements.cl/img/logo.jpg" alt="TCPavements" style="height:36px; object-fit:contain; max-width:100px; flex-shrink:0;">
+                    <div style="flex:1; min-width:0;">
+                        <p style="font-size:0.92rem; font-weight:700; color:var(--text-dark); margin-bottom:0.15rem;">TCPavements</p>
+                        <p style="font-size:0.8rem; color:var(--gray-mid); margin-bottom:0.5rem;">Tecnología TCP® de pavimentos de hormigón · +70 países</p>
+                        <div style="display:flex; gap:1rem;">
+                            <a href="https://tcpavements.cl" target="_blank" rel="noopener" style="font-size:0.78rem; color:var(--orange); font-weight:600; text-decoration:none;">🌐 tcpavements.cl</a>
+                            <a href="https://www.linkedin.com/company/tcpavements/" target="_blank" rel="noopener" style="font-size:0.78rem; color:#0a66c2; font-weight:600; text-decoration:none;">in LinkedIn</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- FORTA -->
+                <div style="background:var(--bg-light); border-radius:12px; padding:1.25rem 1.5rem; border:1px solid var(--border); display:flex; align-items:center; gap:1rem;">
+                    <img src="img/logos/forta.jpg" alt="FORTA" style="height:36px; object-fit:contain; max-width:100px; flex-shrink:0;" onerror="this.outerHTML='<span style=&quot;font-weight:700; font-size:1.1rem; color:#D4792C; letter-spacing:0.05em; flex-shrink:0;&quot;>FORTA</span>'">
+                    <div style="flex:1; min-width:0;">
+                        <p style="font-size:0.92rem; font-weight:700; color:var(--text-dark); margin-bottom:0.15rem;">FORTA Corporation</p>
+                        <p style="font-size:0.8rem; color:var(--gray-mid); margin-bottom:0.5rem;">Fibras sintéticas FORTA-FERRO® para refuerzo de hormigón</p>
+                        <div style="display:flex; gap:1rem;">
+                            <a href="https://fortacorp.com" target="_blank" rel="noopener" style="font-size:0.78rem; color:var(--orange); font-weight:600; text-decoration:none;">🌐 fortacorp.com</a>
+                            <a href="https://www.linkedin.com/company/forta-corporation/" target="_blank" rel="noopener" style="font-size:0.78rem; color:#0a66c2; font-weight:600; text-decoration:none;">in LinkedIn</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Litoral -->
+                <div style="background:var(--bg-light); border-radius:12px; padding:1.25rem 1.5rem; border:1px solid var(--border); display:flex; align-items:center; gap:1rem;">
+                    <img src="img/logos/litoral.jpg" alt="Litoral Ingeniería" style="height:36px; object-fit:contain; max-width:120px; flex-shrink:0;" onerror="this.outerHTML='<span style=&quot;font-weight:700; font-size:0.95rem; color:#D4792C; letter-spacing:0.02em; flex-shrink:0;&quot;>Litoral</span>'">
+                    <div style="flex:1; min-width:0;">
+                        <p style="font-size:0.92rem; font-weight:700; color:var(--text-dark); margin-bottom:0.15rem;">Litoral Ingeniería Ltda.</p>
+                        <p style="font-size:0.8rem; color:var(--gray-mid); margin-bottom:0.5rem;">Tecnología del hormigón, asesoría técnica y control de calidad</p>
+                        <div style="display:flex; gap:1rem;">
+                            <a href="https://www.linkedin.com/company/litoral-ingenier%C3%ADa-ltda/" target="_blank" rel="noopener" style="font-size:0.78rem; color:#0a66c2; font-weight:600; text-decoration:none;">in LinkedIn</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- CONTACTO -->
+<!-- ============================================================ -->
+<section id="contacto">
+    <div class="section-inner">
+        <div class="section-header fade-in">
+            <div class="accent-line"></div>
+            <h2>Contacto</h2>
+            <p>¿Tienes un proyecto de piso industrial, pavimento o una necesidad de revisión técnica? Cuéntanos el contexto del proyecto y te contactaremos con una propuesta ajustada al alcance</p>
+        </div>
+        <div class="contact-grid">
+            <div class="contact-info fade-in">
+                <h3>Solicitar una Propuesta</h3>
+                <p>Cada proyecto se evalúa según superficie, complejidad operativa, tecnología de piso, etapa de desarrollo y alcance requerido. La propuesta técnica se ajusta a la realidad de cada obra.</p>
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                    </div>
+                    <div>
+                        <strong>Presencia</strong>
+                        <span>Chile - Perú - Colombia - EE.UU. - México - Costa Rica</span>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                    </div>
+                    <div>
+                        <strong>Email</strong>
+                        <span>pablo@ltpisos.com</span>
+                    </div>
+                </div>
+            </div>
+            <div class="contact-form fade-in">
+                <form onsubmit="event.preventDefault(); alert('Gracias por su mensaje. Nos pondremos en contacto pronto.')">
+                    <div class="form-group">
+                        <label>Nombre</label>
+                        <input type="text" placeholder="Su nombre completo" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" placeholder="su@email.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Empresa</label>
+                        <input type="text" placeholder="Nombre de su empresa">
+                    </div>
+                    <div class="form-group">
+                        <label>País</label>
+                        <input type="text" placeholder="Chile, Perú, Colombia...">
+                    </div>
+                    <div class="form-group">
+                        <label>Superficie aproximada (m²)</label>
+                        <input type="text" placeholder="Ej: 10.000 m²">
+                    </div>
+                    <div class="form-group">
+                        <label>Descripción del proyecto</label>
+                        <textarea placeholder="Tipo de uso, etapa del proyecto, requerimiento específico..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width:100%">Solicitar Propuesta</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <div class="footer-inner">
+        <div>
+            <p style="font-weight:600; color:rgba(255,255,255,0.9); margin-bottom:0.25rem;">LTPisos Diseño e Ingeniería S.p.A.</p>
+            <p style="font-size:0.8rem;">© 2026 · Chile · Perú · Colombia · México · Costa Rica · EEUU · pablo@ltpisos.com</p>
+        </div>
+        <ul class="footer-links">
+            <li><a href="#inicio">Inicio</a></li>
+            <li><a href="#servicios">Servicios</a></li>
+            <li><a href="#optislab">OptiSlab</a></li>
+            <li><a href="proyectos.html">Proyectos</a></li>
+            <li><a href="equipo.html">Equipo</a></li>
+            <li><a href="socios.html">Socios Estratégicos</a></li>
+            <li><a href="publicaciones.html">Publicaciones</a></li>
+            <li><a href="#contacto">Contacto</a></li>
+            <li><a href="https://www.linkedin.com/company/15079852/" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:0.35rem;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                LinkedIn
+            </a></li>
+        </ul>
+    </div>
+</footer>
+
+<script>
+// Hero slideshow
+(function() {
+    const slides = document.querySelectorAll('.hero-slide');
+    let current = 0;
+    setInterval(() => {
+        slides[current].classList.remove('active');
+        current = (current + 1) % slides.length;
+        slides[current].classList.add('active');
+    }, 4000);
+})();
+
+// Navbar scroll effect
+window.addEventListener('scroll', () => {
+    document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+});
+
+// Scroll animations
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+// Active nav link
+const sections = document.querySelectorAll('section');
+const navLinks = document.querySelectorAll('.navbar-links a');
+window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(section => {
+        const top = section.offsetTop - 100;
+        if (window.scrollY >= top) current = section.getAttribute('id');
+    });
+    navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === '#' + current) link.classList.add('active');
+    });
+});
+
+// Mobile menu toggle — lock body scroll while open
+document.querySelector('.menu-toggle').addEventListener('click', function() {
+    const nb = document.querySelector('.navbar-bottom');
+    const isOpen = nb.classList.toggle('open');
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+});
+// Close mobile menu on link click
+document.querySelectorAll('.navbar-links a').forEach(link => {
+    link.addEventListener('click', () => {
+        document.querySelector('.navbar-bottom').classList.remove('open');
+        document.body.style.overflow = '';
+    });
+});
+</script>
+
+</body>
+</html>
